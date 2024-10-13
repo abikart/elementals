@@ -1,0 +1,43 @@
+{
+	"name": "elementals",
+	"version": "0.0.1",
+	"description": "Custom Elements for interactive and them-able browser native HTML tags.",
+	"private": true,
+	"scripts": {
+		"check": "pnpm biome check --write",
+		"prepare": "husky install",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"changeset": "changeset",
+		"version": "changeset version",
+		"publish": "changeset publish"
+	},
+	"engines": {
+		"node": ">=20.0.0",
+		"pnpm": ">=9.0.0"
+	},
+	"type": "module",
+	"author": "abikart",
+	"license": "MIT",
+	"workspaces": ["packages/*", "apps/*"],
+	"devDependencies": {
+		"@biomejs/biome": "1.9.3",
+		"@changesets/cli": "^2.27.9",
+		"@commitlint/cli": "^19.5.0",
+		"@commitlint/config-conventional": "^19.5.0",
+		"husky": "^8.0.0"
+	},
+	"keywords": [
+		"HTML",
+		"CSS",
+		"JavaScript",
+		"components",
+		"components library",
+		"react",
+		"vue",
+		"svelte",
+		"angular",
+		"custom-elements",
+		"native",
+		"theming"
+	]
+}
