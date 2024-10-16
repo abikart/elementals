@@ -1,0 +1,33 @@
+{
+	"name": "elementals",
+	"version": "0.0.1",
+	"description": "Make browser native HTML tags interactive and them-able with custom elements.",
+	"main": "index.js",
+	"type": "module",
+	"scripts": {
+		"dev": "pnpm tsup --watch",
+		"build": "pnpm tsup"
+	},
+	"exports": {
+		"./button": {
+			"types": "./dist/button/index.d.ts",
+			"default": "./dist/button.js"
+		},
+		"./color/primitives": {
+			"types": "./dist/primitives.d.ts",
+			"default": "./dist/primitives.js"
+		}
+	},
+	"files": ["dist"],
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"colorjs.io": "^0.5.2",
+		"tsup": "^8.3.0",
+		"typescript": "^5.6.3"
+	},
+	"dependencies": {
+		"esbuild-plugin-raw": "^0.1.8"
+	}
+}

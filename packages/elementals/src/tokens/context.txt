@@ -1,0 +1,3 @@
+Setup a token system for colors.
+General idea is to have a heirarchal system for colors.
+Starts with a primitive set of colors

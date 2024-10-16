@@ -1,12 +1,11 @@
 {
-	"name": "elementals",
+	"name": "@elementals/workspace",
 	"version": "0.0.1",
-	"description": "Custom Elements for interactive and them-able browser native HTML tags.",
+	"description": "Make browser native HTML tags interactive and them-able with custom elements.",
 	"private": true,
 	"scripts": {
 		"check": "pnpm biome check --write",
 		"prepare": "husky install",
-		"test": "echo \"Error: no test specified\" && exit 1",
 		"changeset": "changeset",
 		"version": "changeset version",
 		"publish": "changeset publish"

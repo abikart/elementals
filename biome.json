@@ -7,7 +7,14 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"ignore": []
+		"ignore": [
+			"**/tsconfig.json",
+			"**/tsconfig.*.json",
+			"**/.changeset/*",
+			"**/dist/*",
+			"**/build/*",
+			"**/node_modules/*"
+		]
 	},
 	"formatter": {
 		"enabled": true,
