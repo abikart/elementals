@@ -45,7 +45,7 @@ const ColorPaletteGrid: React.FC = () => {
 		<div style={styles.container}>
 			<h1 style={styles.title}>Color Palette Grid</h1>
 			<div style={styles.grid}>
-				<div style={styles.headerCell as React.CSSProperties}></div>
+				<div style={styles.headerCell as React.CSSProperties} />
 				{shades.map((shade: string) => (
 					<div key={shade} style={styles.headerCell as React.CSSProperties}>
 						{shade}

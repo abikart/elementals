@@ -22,7 +22,7 @@ const hue = {
 	zinc: "286",
 	neutral: "118",
 	stone: "58",
-	
+
 	red: "25",
 	orange: "47",
 	amber: "70",
@@ -59,11 +59,11 @@ function generateShades(hue: string, chroma?: string): Record<string, string> {
 			Number.parseFloat(chroma ?? values.chroma),
 			Number.parseFloat(hue),
 		]);
-		
+
 		// Convert to P3 and provide fallback to sRGB
 		const p3Color = color.to("p3");
 		const srgbColor = color.to("srgb");
-		
+
 		shades[shade] = p3Color.toString({ format: "p3" });
 		shades[`${shade}-srgb`] = srgbColor.toString({ format: "hex" });
 	}

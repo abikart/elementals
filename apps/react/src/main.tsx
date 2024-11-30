@@ -1,16 +1,13 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import {
-	createBrowserRouter,
-	RouterProvider,
-  } from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Colors from "./pages/colors/page.tsx";
 import "./index.css";
 
 const router = createBrowserRouter([
 	{
-	  path: "/",
-	  element: <div>Hello world!</div>,
+		path: "/",
+		element: <div>Hello world!</div>,
 	},
 	{
 		path: "/colors",
