@@ -1,5 +1,5 @@
 {
-	"name": "elementals",
+	"name": "@elementals/elements",
 	"version": "0.0.1",
 	"description": "Make browser native HTML tags interactive and them-able with custom elements.",
 	"main": "index.js",
@@ -18,16 +18,16 @@
 			"default": "./dist/primitives.js"
 		}
 	},
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"devDependencies": {
 		"colorjs.io": "^0.5.2",
+		"esbuild-plugin-raw": "^0.1.8",
 		"tsup": "^8.3.0",
 		"typescript": "^5.6.3"
-	},
-	"dependencies": {
-		"esbuild-plugin-raw": "^0.1.8"
 	}
 }

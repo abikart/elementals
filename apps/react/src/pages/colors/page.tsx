@@ -1,12 +1,12 @@
-import { primitives } from "elementals/color/primitives";
+import { primitives } from "@elementals/elements/color/primitives";
 import React from "react";
-
-type ColorShades = Record<string, string>;
-type ColorPalette = Record<string, ColorShades>;
 
 const styles = {
 	container: {
 		padding: "16px",
+		fontFamily: "monospace",
+		background: "black",
+		color: "white",
 	},
 	title: {
 		fontSize: "24px",
@@ -23,7 +23,10 @@ const styles = {
 		textAlign: "center",
 	},
 	colorName: {
+		justifyContent: "end",
 		fontWeight: "bold",
+		display: "flex",
+		alignItems: "center",
 	},
 	colorCell: {
 		width: "100%",
@@ -34,13 +37,15 @@ const styles = {
 
 const ColorPaletteGrid: React.FC = () => {
 	const colorNames: string[] = Object.keys(primitives);
-	const shades: string[] = Object.keys(primitives[colorNames[0]]);
+	const shades: string[] = Object.keys(primitives[colorNames[0]]).filter(
+		(shade) => !shade.endsWith("-srgb"),
+	);
 
 	return (
 		<div style={styles.container}>
 			<h1 style={styles.title}>Color Palette Grid</h1>
 			<div style={styles.grid}>
-				<div style={styles.headerCell as React.CSSProperties}>Color</div>
+				<div style={styles.headerCell as React.CSSProperties}></div>
 				{shades.map((shade: string) => (
 					<div key={shade} style={styles.headerCell as React.CSSProperties}>
 						{shade}

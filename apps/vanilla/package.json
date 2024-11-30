@@ -9,7 +9,7 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
-		"elementals": "workspace:*"
+		"@elementals/elements": "workspace:*"
 	},
 	"devDependencies": {
 		"@types/node": "^22.7.5",
