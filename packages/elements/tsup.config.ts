@@ -5,6 +5,7 @@ export default defineConfig((options) => {
 	return {
 		entry: {
 			button: "src/elements/button/index.ts",
+			accordion: "src/elements/accordion/index.ts",
 			primitives: "src/tokens/primitives.ts",
 		},
 		outDir: "dist",

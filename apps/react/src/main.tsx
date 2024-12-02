@@ -1,8 +1,10 @@
-import { StrictMode } from "react";
+import { StrictMode, Suspense, lazy } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import Colors from "./pages/colors/page.tsx";
 import "./index.css";
+
+const Colors = lazy(() => import("./pages/colors/page.tsx"));
+const Accordion = lazy(() => import("./pages/accordion.tsx"));
 
 const router = createBrowserRouter([
 	{
@@ -11,7 +13,19 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/colors",
-		element: <Colors />,
+		element: (
+			<Suspense fallback={<div>Loading...</div>}>
+				<Colors />
+			</Suspense>
+		),
+	},
+	{
+		path: "/accordion",
+		element: (
+			<Suspense fallback={<div>Loading...</div>}>
+				<Accordion />
+			</Suspense>
+		),
 	},
 ]);
 

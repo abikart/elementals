@@ -13,6 +13,10 @@
 			"types": "./dist/button/index.d.ts",
 			"default": "./dist/button.js"
 		},
+		"./accordion": {
+			"types": "./dist/accordion/index.d.ts",
+			"default": "./dist/accordion.js"
+		},
 		"./color/primitives": {
 			"types": "./dist/primitives.d.ts",
 			"default": "./dist/primitives.js"
