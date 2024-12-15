@@ -30,14 +30,23 @@ These attributes can be added by users to customize the component:
 
 ## Usage
 
-### Basic Usage
+### Basic Usage with Content Wrapper (Recommended)
 ```html
 <el-accordion>
   <details>
     <summary>Section 1</summary>
-    <p>Content for section 1</p>
+    <div class="content">
+      <p>Content for section 1</p>
+    </div>
   </details>
 </el-accordion>
+
+<style>
+  .content {
+    padding: var(--el-accordion-padding);
+    background: var(--el-accordion-content-bg);
+  }
+</style>
 ```
 
 ### Custom Indicators
@@ -147,17 +156,65 @@ details.addEventListener('toggle', (event) => {
 
 ## CSS Custom Properties
 
+The accordion component uses CSS custom properties for theming. These properties can be overridden to customize the appearance of the accordion.
+
+### Global Theme Overrides
 | Property | Default | Description |
 |----------|---------|-------------|
-| `--el-accordion-border` | `var(--el-border-width, 1px) solid var(--el-border-color, #ddd)` | Border style for accordion items |
-| `--el-accordion-header-bg` | `var(--el-surface-2, #fafafa)` | Background color for headers |
-| `--el-accordion-header-color` | `var(--el-text-1, inherit)` | Text color for headers |
-| `--el-accordion-content-bg` | `var(--el-surface-1, #fff)` | Background color for content |
-| `--el-accordion-content-color` | `var(--el-text-1, inherit)` | Text color for content |
-| `--el-accordion-padding` | `var(--el-spacing-3, 1rem)` | Padding for headers and content |
-| `--el-accordion-radius` | `var(--el-radius-2, 4px)` | Border radius for accordion items |
-| `--el-accordion-disabled-opacity` | `0.6` | Opacity for disabled sections |
-| `--el-accordion-rotate` | `1` | Set to 0 to disable rotation animation |
+| `--el-accordion-bg` | `var(--el-surface-1, #fff)` | Background color of the accordion |
+| `--el-accordion-color` | `var(--el-text-1, inherit)` | Text color of the accordion |
+| `--el-accordion-border-color` | `var(--el-border-color, #ddd)` | Border color |
+| `--el-accordion-border-width` | `var(--el-border-width-1, 2px)` | Border width |
+| `--el-accordion-radius` | `var(--el-radius-2, 4px)` | Border radius |
+
+### Layout
+| Property | Default | Description |
+|----------|---------|-------------|
+| `--el-accordion-spacing` | `var(--el-spacing-2, 0.5rem)` | Space between accordion items |
+| `--el-accordion-padding` | `var(--el-spacing-3, 1rem)` | Internal padding |
+| `--el-accordion-gap` | `var(--el-spacing-2, 0.5rem)` | Gap between header elements |
+
+### Header
+| Property | Default | Description |
+|----------|---------|-------------|
+| `--el-accordion-header-bg` | `var(--el-surface-2, #fafafa)` | Header background color |
+| `--el-accordion-header-color` | `var(--el-text-1, inherit)` | Header text color |
+
+### Indicator
+| Property | Default | Description |
+|----------|---------|-------------|
+| `--el-accordion-indicator-size` | `var(--el-icon-size-1, 0.75rem)` | Size of the expand/collapse indicator |
+
+### States
+| Property | Default | Description |
+|----------|---------|-------------|
+| `--el-accordion-disabled-opacity` | `var(--el-opacity-disabled, 0.6)` | Opacity for disabled state |
+
+### Animation
+| Property | Default | Description |
+|----------|---------|-------------|
+| `--el-accordion-duration` | `var(--el-duration-2, 200ms)` | Animation duration |
+| `--el-accordion-easing` | `var(--el-easing-standard, ease)` | Animation easing function |
+| `--el-accordion-rotate` | `1` | Enable/disable rotation animation |
+
+### Example Usage
+
+```css
+/* Global theme customization */
+:root {
+  --el-surface-1: #ffffff;
+  --el-surface-2: #f8f9fa;
+  --el-text-1: #212529;
+  --el-border-color: #dee2e6;
+}
+
+/* Component-specific customization */
+el-accordion {
+  --el-accordion-header-bg: #e9ecef;
+  --el-accordion-padding: 1.5rem;
+  --el-accordion-radius: 8px;
+}
+```
 
 ## Accessibility
 
@@ -268,3 +325,61 @@ The component uses native `<details>` elements, ensuring content remains accessi
 ## Browser Support
 
 Works in all modern browsers that support Custom Elements v1 and `<details>` elements. 
+
+## Content Structure
+
+The accordion expects a specific structure for optimal animation behavior:
+- Each `<details>` element should contain:
+  1. A `<summary>` element for the header
+  2. A single `<div>` element for the content
+
+```html
+<el-accordion>
+  <details>
+    <summary>Section Title</summary>
+    <div>  <!-- Single content container -->
+      <!-- Any content goes here -->
+      <p>Paragraph one</p>
+      <p>Paragraph two</p>
+      <table>...</table>
+    </div>
+  </details>
+</el-accordion>
+```
+
+### Styling Content
+Apply padding and other styles using CSS custom properties:
+
+```css
+el-accordion [data-part="content"] {
+  padding: var(--el-accordion-padding);
+  background: var(--el-accordion-content-bg);
+}
+```
+
+### ❌ Avoid
+```html
+<!-- Don't use multiple direct children after summary -->
+<details>
+  <summary>Title</summary>
+  <p>First paragraph</p>  <!-- Direct child -->
+  <p>Second paragraph</p> <!-- Direct child -->
+</details>
+
+<!-- Don't use wrapper classes -->
+<details>
+  <summary>Title</summary>
+  <div class="content">...</div>  <!-- No need for classes -->
+</details>
+```
+
+### ✅ Recommended
+```html
+<details>
+  <summary>Title</summary>
+  <div>  <!-- Single content wrapper -->
+    <p>First paragraph</p>
+    <p>Second paragraph</p>
+  </div>
+</details>
+```

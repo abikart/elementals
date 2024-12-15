@@ -65,10 +65,19 @@ A comprehensive library of HTML Custom Elements designed to enhance standard HTM
 - **Semantic HTML**: Encourage the use of semantic HTML within components.
 - **Display Property**: Use `display: contents` to avoid affecting layout.
 - **Style Encapsulation**: Use `[data-part]` attribute selectors to encapsulate styles within components, allowing theming of specific parts.
+- **Content Structure**: Define and document explicit content structure requirements for components.
 
 ### Theming and Styling
 
 - **CSS Custom Properties**: Define CSS variables for all customizable styles.
+- **Property Naming Convention**:
+  - Use `--el-<component>-<property>` format for component-specific properties
+  - Properties should fall back to global theme tokens (e.g., `var(--el-surface-1, #fff)`)
+  - Group properties by category (theme, layout, states, animation)
+  - Document all properties with their purpose and default values
+- **Content Wrappers**:
+  - Prefer semantic structure over utility classes
+  - Document required wrapper elements for optimal component behavior
 - **Default Theme**: Provide a minimal default theme that can be extended or overridden by users.
 - **Theme Application**: Allow themes to be applied globally or scoped to specific components.
 

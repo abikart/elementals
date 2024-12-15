@@ -53,10 +53,19 @@ Create a new component <component-name> inside the `packages/elements/src/elemen
 1. Use CSS custom properties with fallbacks
 2. Use CSS logical properties for RTL support
 3. Target elements using [data-part] selectors
-4. Define component-specific custom properties
+4. Define component-specific custom properties following the naming convention:
+   - Use `--el-<component>-<property>` format
+   - Group properties by category:
+     - Global theme overrides
+     - Component-specific layout
+     - States
+     - Animation
+   - Each property should fall back to a global theme token
 5. Use global design tokens as fallbacks
 6. Avoid Shadow DOM
 7. Use BEM-like naming for data-part attributes
+8. Document all CSS custom properties in the component's markdown file
+9. Define explicit content structure requirements
 
 ### Types (component-name.d.ts)
 1. Export component interface extending HTMLElement
@@ -101,12 +110,18 @@ Create a new component <component-name> inside the `packages/elements/src/elemen
 3. Justify any custom functionality
 4. Provide usage examples
 5. Document CSS custom properties
-6. Document events
-7. Document accessibility features
-8. Include concise functional description
-9. Document all data-parts (internal structure)
-10. Document all data-slots (customization points)
-11. Provide examples for each customization point
+6. Document required content structure:
+   - Required wrapper elements
+   - Content organization
+   - Examples of correct and incorrect usage
+7. Document events
+8. Document accessibility features
+9. Include concise functional description
+10. Document all data-parts (internal structure)
+11. Document all data-slots (customization points)
+12. Provide examples for each customization point
+13. Group CSS custom properties by category in documentation
+14. Include examples of global and component-specific theming
 
 ---
 

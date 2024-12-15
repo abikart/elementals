@@ -1,25 +1,36 @@
 el-accordion {
 	display: contents;
-	--el-accordion-border: var(--el-border-width, 1px) solid
-		var(--el-border-color, #ddd);
+
+	/* Global theme tokens with component-specific overrides */
+	--el-accordion-bg: var(--el-surface-1, #fff);
+	--el-accordion-color: var(--el-text-1, inherit);
+	--el-accordion-border-color: var(--el-border-color, #ddd);
+	--el-accordion-border-width: var(--el-border-width-1, 2px);
+	--el-accordion-radius: var(--el-radius-2, 4px);
+
+	/* Component-specific layout */
+	--el-accordion-spacing: var(--el-spacing-2, 0.5rem);
+	--el-accordion-padding: var(--el-spacing-3, 1rem);
+	--el-accordion-gap: var(--el-spacing-2, 0.5rem);
+
+	/* Header specific */
 	--el-accordion-header-bg: var(--el-surface-2, #fafafa);
 	--el-accordion-header-color: var(--el-text-1, inherit);
-	--el-accordion-content-bg: var(--el-surface-1, #fff);
-	--el-accordion-content-color: var(--el-text-1, inherit);
-	--el-accordion-padding: var(--el-spacing-3, 1rem);
-	--el-accordion-radius: var(--el-radius-2, 4px);
-	--el-accordion-gap: var(--el-spacing-2, 0.5rem);
-	--el-accordion-spacing: var(--el-spacing-2, 0.5rem);
-	--el-accordion-icon-size: var(--el-icon-size-1, 0.75rem);
-	--el-accordion-border-width: var(--el-border-width-1, 2px);
+
+	/* Indicator */
+	--el-accordion-indicator-size: var(--el-icon-size-1, 0.75rem);
+
+	/* States */
 	--el-accordion-disabled-opacity: var(--el-opacity-disabled, 0.6);
-	--el-accordion-transition-duration: var(--el-duration-2, 0.2s);
-	--el-accordion-transition-easing: var(--el-easing-standard, ease);
-	--el-accordion-rotate: 1;
+
+	/* Animation */
+	--el-accordion-duration: var(--el-duration-2, 200ms);
+	--el-accordion-easing: var(--el-easing-standard, ease);
+	--el-accordion-rotate: 1; /* Toggle rotation animation */
 }
 
 el-accordion [data-part="item"] {
-	border: var(--el-accordion-border);
+	border: var(--el-accordion-border-width) solid var(--el-accordion-border-color);
 	border-radius: var(--el-accordion-radius);
 	margin-block-end: var(--el-accordion-spacing);
 	overflow: hidden;
@@ -56,27 +67,23 @@ el-accordion [data-part="indicator"] {
 }
 
 el-accordion [data-part="indicator"][data-indicator="default"] {
-	width: var(--el-accordion-icon-size);
-	height: var(--el-accordion-icon-size);
+	width: var(--el-accordion-indicator-size);
+	height: var(--el-accordion-indicator-size);
 	border: solid currentColor;
-	border-width: 0 var(--el-accordion-border-width)
-		var(--el-accordion-border-width) 0;
+	border-width: 0 var(--el-accordion-border-width) var(--el-accordion-border-width) 0;
 	transform: rotate(45deg);
-	transition: transform
-		calc(var(--el-accordion-transition-duration) * var(--el-accordion-rotate))
-		var(--el-accordion-transition-easing);
+	transition: transform calc(var(--el-accordion-duration) * var(--el-accordion-rotate)) var(--el-accordion-easing);
 }
 
-el-accordion
-	[data-part="item"][open]
-	[data-part="indicator"][data-indicator="default"] {
+el-accordion [data-part="item"][open] [data-part="indicator"][data-indicator="default"] {
 	transform: rotate(-135deg);
 }
 
 el-accordion [data-part="content"] {
-	background: var(--el-accordion-content-bg);
-	color: var(--el-accordion-content-color);
+	background: var(--el-accordion-bg);
+	color: var(--el-accordion-color);
 	padding: var(--el-accordion-padding);
+	overflow: hidden;
 }
 
 el-accordion [data-part="item"][aria-disabled="true"] {
@@ -114,13 +121,9 @@ el-accordion [data-part="item"][open] [data-part="indicator-open"] {
 
 el-accordion [data-part="indicator-open"],
 el-accordion [data-part="indicator-closed"] {
-	transition: transform
-		calc(var(--el-accordion-transition-duration) * var(--el-accordion-rotate))
-		var(--el-accordion-transition-easing);
+	transition: transform calc(var(--el-accordion-duration) * var(--el-accordion-rotate)) var(--el-accordion-easing);
 }
 
-el-accordion[data-rotate="true"]
-	[data-part="item"][open]
-	[data-part="indicator-open"] {
+el-accordion[data-rotate="true"] [data-part="item"][open] [data-part="indicator-open"] {
 	transform: rotate(-180deg);
 }

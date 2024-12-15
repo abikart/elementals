@@ -1,23 +1,27 @@
-import RawPlugin from "esbuild-plugin-raw";
+import RawPlugin from "./lib/esbuild-plugin-raw";
 import { defineConfig } from "tsup";
+import { generateColorVariables } from "./src/tokens/color";
+import fs from "node:fs";
 
-export default defineConfig((options) => {
-	return {
-		entry: {
-			button: "src/elements/button/index.ts",
-			accordion: "src/elements/accordion/index.ts",
-			primitives: "src/tokens/primitives.ts",
-		},
-		outDir: "dist",
-		format: ["esm"],
-		clean: true,
-		minify: true,
-		dts: true,
-		esbuildPlugins: [RawPlugin()],
-		outExtension({ format }) {
-			return {
-				js: `${format === "esm" ? "" : `.${format}`}.js`,
-			};
-		},
-	};
+export default defineConfig({
+	entry: [
+		"src/elements/*/index.ts",
+		"src/tokens/primitives.ts",
+		"src/tokens/color.ts",
+		// Add an entry for the tokens if needed
+	],
+	format: ["esm"],
+	target: "es2018",
+	dts: true,
+	clean: true,
+	sourcemap: true,
+	esbuildPlugins: [RawPlugin()],
+	onSuccess: async () => {
+		// Generate the color CSS variables and write to a file
+		const cssContent = generateColorVariables();
+		fs.writeFileSync("dist/color.css", cssContent, "utf-8");
+
+		// Optionally, copy the CSS file to a specific location
+		// fs.copyFileSync('dist/color.css', 'path/to/output/color.css');
+	},
 });

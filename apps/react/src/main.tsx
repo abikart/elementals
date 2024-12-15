@@ -3,8 +3,10 @@ import { createRoot } from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./index.css";
 
+import Accordion from "./pages/accordion.tsx";
+import SentimentPalette from "./pages/colors/sentimentPalette.tsx";
 const Colors = lazy(() => import("./pages/colors/page.tsx"));
-const Accordion = lazy(() => import("./pages/accordion.tsx"));
+// const Accordion = lazy(() => import("./pages/accordion.tsx"));
 
 const router = createBrowserRouter([
 	{
@@ -21,11 +23,16 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/accordion",
-		element: (
-			<Suspense fallback={<div>Loading...</div>}>
-				<Accordion />
-			</Suspense>
-		),
+		element: <Accordion />,
+		// element: (
+		// 	<Suspense fallback={<div>Loading...</div>}>
+		// 		<Accordion />
+		// 	</Suspense>
+		// ),
+	},
+	{
+		path: "/sentiments",
+		element: <SentimentPalette />,
 	},
 ]);
 

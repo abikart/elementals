@@ -37,9 +37,7 @@ const styles = {
 
 const ColorPaletteGrid: React.FC = () => {
 	const colorNames: string[] = Object.keys(primitives);
-	const shades: string[] = Object.keys(primitives[colorNames[0]]).filter(
-		(shade) => !shade.endsWith("-srgb"),
-	);
+	const shades: string[] = Object.keys(primitives[colorNames[0]]).filter((shade) => !shade.endsWith("-srgb"));
 
 	return (
 		<div style={styles.container}>

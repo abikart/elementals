@@ -76,10 +76,7 @@ function createColorPalette(): Record<string, Record<string, string>> {
 	const palette: Record<string, Record<string, string>> = {};
 
 	for (const [colorName, hueValue] of Object.entries(hue)) {
-		palette[colorName] = generateShades(
-			hueValue,
-			grayChroma[colorName as keyof typeof grayChroma],
-		);
+		palette[colorName] = generateShades(hueValue, grayChroma[colorName as keyof typeof grayChroma]);
 	}
 
 	return palette;
@@ -88,16 +85,14 @@ function createColorPalette(): Record<string, Record<string, string>> {
 export const primitives = createColorPalette();
 
 // Function to generate shades for a custom color
-export function generateCustomColorShades(
-	baseColor: string,
-): Record<string, string> {
+export function generateCustomColorShades(baseColor: string): Record<string, string> {
 	return generateShades(baseColor);
 }
 
 // Updated function to generate CSS variables from primitives
-export function generateCssVariables(
-	palette: Record<string, Record<string, string>>,
-): string {
+// Example:
+// --el-color-red-500: #ff0000;
+export function generateCssVariables(palette: Record<string, Record<string, string>>): string {
 	let cssVariables = ":root {\n";
 
 	for (const [colorName, shades] of Object.entries(palette)) {
