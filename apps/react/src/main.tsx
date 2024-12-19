@@ -4,7 +4,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./index.css";
 
 import Accordion from "./pages/accordion.tsx";
-import SentimentPalette from "./pages/colors/sentimentPalette.tsx";
+import Palette from "./pages/colors/palette.tsx";
 const Colors = lazy(() => import("./pages/colors/page.tsx"));
 // const Accordion = lazy(() => import("./pages/accordion.tsx"));
 
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/sentiments",
-		element: <SentimentPalette />,
+		element: <Palette />,
 	},
 ]);
 

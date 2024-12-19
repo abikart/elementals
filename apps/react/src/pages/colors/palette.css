@@ -1,0 +1,170 @@
+@media (prefers-color-scheme: dark) {
+	body {
+		background-color: var(--el-color-neutral-bg);
+	}
+}
+
+.sentiment-palette {
+	padding: 2rem;
+}
+
+.tabs {
+	display: flex;
+	gap: 0.5rem;
+	margin-bottom: 2rem;
+}
+
+.tab {
+	padding: 0.75rem 1.5rem;
+	border: 1px solid transparent;
+	border-radius: 0.5rem;
+	font-weight: 600;
+	transition: all 0.2s;
+}
+
+.tab:hover {
+	filter: brightness(0.95);
+}
+
+.tab.active {
+	filter: brightness(0.9);
+}
+
+.palette {
+	display: flex;
+	flex-direction: column;
+	gap: 3rem;
+}
+
+.usage-group {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+
+.usage-group h3 {
+	font-size: 1.25rem;
+	font-weight: 600;
+	color: #141f33;
+}
+
+.prominence-row {
+	display: flex;
+	gap: 2rem;
+	margin-bottom: 2rem;
+}
+
+.prominence-block {
+	flex: 0 0 auto;
+	border-radius: 0.5rem;
+	overflow: hidden;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.prominence-label {
+	padding: 0.5rem 1rem;
+	font-size: 0.75rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	background: #f8f9fa;
+	border-bottom: 1px solid #eee;
+}
+
+.interaction-column {
+	display: flex;
+	flex-direction: column;
+}
+
+.color-swatch {
+	height: 2.5rem;
+	width: 8rem;
+	display: flex;
+	align-items: center;
+	padding: 0 1rem;
+	font-size: 0.75rem;
+	color: inherit;
+	transition: all 0.2s;
+}
+
+.color-swatch:hover {
+	filter: brightness(0.95);
+}
+
+.color-label {
+	opacity: 0.8;
+}
+
+.examples-section {
+	margin-top: 3rem;
+	padding-top: 2rem;
+	border-top: 1px solid #eee;
+}
+
+.example-row {
+	display: flex;
+	gap: 3rem;
+}
+
+.example-group {
+	flex: 1;
+	min-width: 300px;
+}
+
+.example-group h4 {
+	font-size: 0.875rem;
+	font-weight: 600;
+	margin-bottom: 1rem;
+	color: #404856;
+}
+
+.example-items {
+	display: flex;
+	gap: 1rem;
+	flex-wrap: wrap;
+}
+
+.example-button {
+	padding: 0.5rem 1rem;
+	border-radius: 0.375rem;
+	font-size: 0.875rem;
+	font-weight: 500;
+	transition: all 0.2s;
+}
+
+.example-button:hover {
+	filter: brightness(0.95);
+}
+
+.example-tag {
+	display: inline-flex;
+	align-items: center;
+	padding: 0.25rem 0.75rem;
+	border-radius: 9999px;
+	font-size: 0.75rem;
+	font-weight: 500;
+}
+
+.example-card {
+	flex: 1;
+	min-width: 200px;
+	border-radius: 0.5rem;
+	border: 1px solid;
+	overflow: hidden;
+	transition: all 0.2s;
+}
+
+.example-card:hover {
+	filter: brightness(0.98);
+}
+
+.card-header {
+	padding: 0.75rem 1rem;
+	font-weight: 500;
+	border-bottom: 1px solid;
+	border-color: inherit;
+}
+
+.card-content {
+	padding: 1rem;
+}
