@@ -13,18 +13,28 @@ A semantic color system that builds on primitive colors to create meaningful, co
 - Example: `--el-color-blue-500`, `--el-color-red-700`
 
 ### 2. Semantic Layer
-The semantic layer organizes colors by four key dimensions:
+The semantic layer is divided into two main categories:
 
-#### A. Sentiments
-Emotional or functional context of colors:
-- neutral: Base UI elements
-- accent: Primary actions and highlights
-- success: Positive actions/states
-- danger: Destructive actions/warnings
-- warning: Cautionary states
-- info: Informational elements
+#### A. Neutral Palette
+A dedicated palette for non-chromatic colors used extensively throughout the UI:
+- Base UI elements
+- Text colors
+- Backgrounds
+- Borders
+- Shadows
+- Overlays
 
-#### B. Usage
+#### B. Accent Palettes
+Color palettes for UI elements that need emphasis or convey meaning:
+- accent: Primary actions and highlights (blue)
+- success: Positive actions/states (green)
+- danger: Destructive actions/warnings (red)
+- warning: Cautionary states (amber)
+- info: Informational elements (blue)
+
+Each palette (neutral and accents) defines colors across three dimensions:
+
+#### Usage
 How the color is applied:
 - bg: Background colors
 - fg: Foreground/text colors
@@ -32,13 +42,13 @@ How the color is applied:
 - shadow: Shadow colors
 - outline: Focus outline colors
 
-#### C. Prominence
+#### Prominence
 Visual weight of the element:
 - weak: Subtle or secondary elements
 - normal: Default state
 - strong: Emphasized elements
 
-#### D. Interaction
+#### Interaction
 Element's interactive state:
 - idle: Default state
 - hovered: Mouse hover state
@@ -48,10 +58,13 @@ Element's interactive state:
 - selected: Selected state
 
 ### 3. Token Structure
-Tokens are generated using the format:
-`--el-color-{sentiment}-{usage}-{prominence}-{interaction}`
+Tokens follow two patterns:
+- Neutral: `--el-color-neutral-{usage}-{prominence}-{interaction}`
+- Accents: `--el-color-{accent}-{usage}-{prominence}-{interaction}`
 
-Example: `--el-color-danger-bg-normal-idle`
+Examples: 
+- `--el-color-neutral-bg-normal-idle`
+- `--el-color-accent-bg-normal-idle`
 
 ## Shade Mapping
 
@@ -116,3 +129,7 @@ const shadeMapping = {
 - OKLCH Color Space
 - Tailwind Colors
 - Asana's Design Tokens
+
+## Updated Color Generation Approach
+
+We now define "colorCurves" in primitives.ts, mapping each named color (slate, gray, etc.) to a set of four OKLCH control points. An interpolation function generates an 11-step scale (50..950) for each color. This more closely matches Tailwind's hand-tuned palette while remaining systematically extensible.

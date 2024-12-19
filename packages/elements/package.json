@@ -6,9 +6,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "pnpm tsup --watch",
-		"build": "tsup && npm run generate-color-css",
-		"generate-color-css": "ts-node scripts/generate-color-css.ts",
-		"build:all": "tsup && npm run generate-color-css"
+		"build": "tsup"
 	},
 	"exports": {
 		"./button": {

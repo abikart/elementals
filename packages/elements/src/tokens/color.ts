@@ -1,19 +1,23 @@
+import { type Mode, accentPaletteDefinitions, neutralPaletteDefinitions } from "./palette";
 import { primitives } from "./primitives";
 
-// Sentiments define the emotional or functional context of colors
-const sentiments = {
-	neutral: "gray",
-	accent: "blue",
+// neutral is the default color palette
+const neutral = "gray";
+
+// Accents define the context of colors
+const accents = {
+	primary: "blue",
 	success: "green",
 	danger: "red",
 	warning: "amber",
 	info: "blue",
 } as const;
 
-type Sentiment = keyof typeof sentiments;
+type Accent = keyof typeof accents;
 
 // Usage defines how the color is applied
 const usage = {
+	base: "base", // default
 	bg: "background",
 	fg: "foreground",
 	border: "border",
@@ -26,7 +30,7 @@ type Usage = keyof typeof usage;
 // Prominence defines the visual weight
 const prominence = {
 	weak: "weak",
-	normal: "normal",
+	normal: "normal", // default
 	strong: "strong",
 } as const;
 
@@ -34,7 +38,7 @@ type Prominence = keyof typeof prominence;
 
 // Interaction defines the state of the element
 const interaction = {
-	idle: "idle",
+	idle: "idle", // default
 	hovered: "hovered",
 	pressed: "pressed",
 	focused: "focused",
@@ -44,93 +48,115 @@ const interaction = {
 
 type Interaction = keyof typeof interaction;
 
-// Shade mapping organized by token
-const shadeMapping = {
-	// Background shades
-	"bg-weak-idle": { light: "50", dark: "950" },
-	"bg-weak-hovered": { light: "100", dark: "900" },
-	"bg-weak-pressed": { light: "200", dark: "800" },
-	"bg-normal-idle": { light: "100", dark: "900" },
-	"bg-normal-hovered": { light: "200", dark: "800" },
-	"bg-normal-pressed": { light: "300", dark: "700" },
-	"bg-strong-idle": { light: "200", dark: "800" },
-	"bg-strong-hovered": { light: "300", dark: "700" },
-	"bg-strong-pressed": { light: "400", dark: "600" },
-
-	// Foreground shades
-	"fg-weak-idle": { light: "500", dark: "400" },
-	"fg-weak-hovered": { light: "600", dark: "300" },
-	"fg-weak-pressed": { light: "700", dark: "200" },
-	"fg-normal-idle": { light: "700", dark: "200" },
-	"fg-normal-hovered": { light: "800", dark: "100" },
-	"fg-normal-pressed": { light: "900", dark: "50" },
-	"fg-strong-idle": { light: "900", dark: "100" },
-	"fg-strong-hovered": { light: "950", dark: "50" },
-	"fg-strong-pressed": { light: "950", dark: "50" },
-
-	// Border shades
-	"border-weak-idle": { light: "200", dark: "800" },
-	"border-weak-hovered": { light: "300", dark: "700" },
-	"border-weak-pressed": { light: "400", dark: "600" },
-	"border-normal-idle": { light: "300", dark: "700" },
-	"border-normal-hovered": { light: "400", dark: "600" },
-	"border-normal-pressed": { light: "500", dark: "500" },
-	"border-strong-idle": { light: "400", dark: "600" },
-	"border-strong-hovered": { light: "500", dark: "500" },
-	"border-strong-pressed": { light: "600", dark: "400" },
-
-	// States
-	"bg-disabled": { light: "100", dark: "900" },
-	"fg-disabled": { light: "300", dark: "700" },
-	"border-disabled": { light: "200", dark: "800" },
-	"bg-selected": { light: "100", dark: "800" },
-	"fg-selected": { light: "700", dark: "200" },
-	"border-selected": { light: "400", dark: "600" },
-} as const;
-
-type ShadeKey = keyof typeof shadeMapping;
-type ColorMode = keyof (typeof shadeMapping)[ShadeKey];
-
 // Validate token combinations
 function isValidToken(usage: Usage, prominence: Prominence, interaction: Interaction): boolean {
-	const key = `${usage}-${prominence}-${interaction}` as ShadeKey;
-	return key in shadeMapping || isStateToken(usage, interaction);
+	const usageObj = neutralPaletteDefinitions[usage];
+	if (!usageObj) return false;
+
+	const prominenceObj = usageObj[prominence];
+	if (!prominenceObj) return false;
+
+	return interaction in prominenceObj;
 }
 
-// Check if it's a state token (disabled/selected)
-function isStateToken(usage: Usage, interaction: Interaction): boolean {
-	const key = `${usage}-${interaction}` as ShadeKey;
-	return key in shadeMapping;
+// Get the appropriate shade for a combination
+function getShade(usage: Usage, prominence: Prominence, interaction: Interaction): Mode | undefined {
+	const usageObj = neutralPaletteDefinitions[usage];
+	const prominenceObj = usageObj?.[prominence];
+	const interactionObj = prominenceObj?.[interaction];
+	return interactionObj;
 }
-
-// Get the appropriate shade key for a combination
-function getShadeKey(usage: Usage, prominence: Prominence, interaction: Interaction): ShadeKey {
-	if (isStateToken(usage, interaction)) {
-		return `${usage}-${interaction}` as ShadeKey;
-	}
-	return `${usage}-${prominence}-${interaction}` as ShadeKey;
-}
-
+type ColorMode = "light" | "dark";
 // Function to generate semantic color tokens
 function generateSemanticTokens(mode: ColorMode = "light") {
 	const tokens: Record<string, string> = {};
 
-	for (const [sentimentKey, sentimentValue] of Object.entries(sentiments)) {
-		for (const [shadeKey, shadeValues] of Object.entries(shadeMapping)) {
-			const shade = shadeValues[mode];
-			const primitive = primitives[sentimentValue as keyof typeof primitives];
-			if (!primitive) continue;
+	// Generate neutral tokens
+	const neutralPrimitive = primitives[neutral];
+	if (neutralPrimitive) {
+		for (const [usageKey, usageObj] of Object.entries(neutralPaletteDefinitions)) {
+			if (!usageObj) continue;
 
-			const token = `--el-color-${sentimentKey}-${shadeKey}`;
-			tokens[token] = primitive[shade];
+			for (const [prominenceKey, prominenceValue] of Object.entries(usageObj)) {
+				if (!prominenceValue) continue;
+
+				for (const [interactionKey, modes] of Object.entries(prominenceValue) as [string, Mode][]) {
+					const _mode = modes[mode];
+
+					// Build neutral token name
+					const parts = [
+						"--el-color-neutral",
+						usageKey !== "base" && usageKey,
+						prominenceKey !== "normal" && prominenceKey,
+						interactionKey !== "idle" && interactionKey,
+					].filter(Boolean);
+
+					const token = parts.join("-");
+					tokens[token] = neutralPrimitive[_mode];
+				}
+			}
+		}
+	}
+
+	// Generate accent tokens
+	for (const [accentKey, accentValue] of Object.entries(accents)) {
+		const primitive = primitives[accentValue];
+		if (!primitive) continue;
+
+		for (const [usageKey, usageObj] of Object.entries(accentPaletteDefinitions)) {
+			if (!usageObj) continue;
+
+			for (const [prominenceKey, prominenceValue] of Object.entries(usageObj)) {
+				if (!prominenceValue) continue;
+
+				for (const [interactionKey, modes] of Object.entries(prominenceValue) as [string, Mode][]) {
+					const _mode = modes[mode];
+
+					// Build accent token name
+					const parts = [
+						`--el-color-${accentKey}`,
+						usageKey !== "base" && usageKey,
+						prominenceKey !== "normal" && prominenceKey,
+						interactionKey !== "idle" && interactionKey,
+					].filter(Boolean);
+
+					const token = parts.join("-");
+					tokens[token] = primitive[_mode];
+				}
+			}
 		}
 	}
 
 	return tokens;
 }
 
+// Helper function to get a semantic color token
+function getSemanticColor(
+	accent: Accent,
+	usage: Usage = "base",
+	prominence: Prominence = "normal",
+	interaction: Interaction = "idle",
+): string {
+	const shade = getShade(usage, prominence, interaction);
+
+	if (!shade) {
+		console.warn(`Invalid token combination: ${usage}-${prominence}-${interaction}. Falling back to default.`);
+		return `var(--el-color-${accent})`;
+	}
+
+	// Build token name, skipping defaults
+	const parts = [
+		`--el-color-${accent}`,
+		usage !== "base" ? usage : null,
+		prominence !== "normal" ? prominence : null,
+		interaction !== "idle" ? interaction : null,
+	].filter(Boolean);
+
+	return `var(${parts.join("-")})`;
+}
+
 // Function to generate CSS variables
-function generateColorVariables(): string {
+function generateColorTokens(): string {
 	const lightTokens = generateSemanticTokens("light");
 	const darkTokens = generateSemanticTokens("dark");
 
@@ -151,34 +177,19 @@ function generateColorVariables(): string {
 	return css;
 }
 
-// Helper function to get a semantic color token
-function getSemanticColor(
-	sentiment: Sentiment,
-	usage: Usage,
-	prominence: Prominence = "normal",
-	interaction: Interaction = "idle",
-): string {
-	if (!isValidToken(usage, prominence, interaction)) {
-		console.warn(`Invalid token combination: ${usage}-${prominence}-${interaction}. Falling back to normal-idle.`);
-		return `var(--el-color-${sentiment}-${usage}-normal-idle)`;
-	}
-
-	const shadeKey = getShadeKey(usage, prominence, interaction);
-	const token = `--el-color-${sentiment}-${shadeKey}`;
-	return `var(${token})`;
-}
-
 // Exported types and functions
 export {
-	sentiments,
+	accents,
 	usage,
 	prominence,
 	interaction,
+	neutralPaletteDefinitions,
+	accentPaletteDefinitions,
 	generateSemanticTokens,
-	generateColorVariables,
+	generateColorTokens,
 	getSemanticColor,
 	isValidToken,
-	type Sentiment,
+	type Accent,
 	type Usage,
 	type Prominence,
 	type Interaction,

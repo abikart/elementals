@@ -1,7 +1,7 @@
-import RawPlugin from "./lib/esbuild-plugin-raw";
-import { defineConfig } from "tsup";
-import { generateColorVariables } from "./src/tokens/color";
 import fs from "node:fs";
+import { defineConfig } from "tsup";
+import RawPlugin from "./lib/esbuild-plugin-raw";
+import { generateColorTokens } from "./src/tokens/color";
 
 export default defineConfig({
 	entry: [
@@ -18,7 +18,7 @@ export default defineConfig({
 	esbuildPlugins: [RawPlugin()],
 	onSuccess: async () => {
 		// Generate the color CSS variables and write to a file
-		const cssContent = generateColorVariables();
+		const cssContent = generateColorTokens();
 		fs.writeFileSync("dist/color.css", cssContent, "utf-8");
 
 		// Optionally, copy the CSS file to a specific location
