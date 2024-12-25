@@ -5,8 +5,9 @@ import "./index.css";
 
 import Accordion from "./pages/accordion.tsx";
 import Palette from "./pages/colors/palette.tsx";
+import Grid from "./pages/grid/grid.jsx";
 const Colors = lazy(() => import("./pages/colors/page.tsx"));
-// const Accordion = lazy(() => import("./pages/accordion.tsx"));
+// const Accordion = lazy(() => import("./pages/accordion.tsx"))
 
 const router = createBrowserRouter([
 	{
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
 	{
 		path: "/sentiments",
 		element: <Palette />,
+	},
+	{
+		path: "/grid",
+		element: <Grid />,
 	},
 ]);
 
