@@ -5,7 +5,7 @@ import "./index.css";
 
 import Accordion from "./pages/accordion.tsx";
 import Palette from "./pages/colors/palette.tsx";
-import Grid from "./pages/grid/grid.jsx";
+import Grid from "./pages/grid/grid.tsx";
 const Colors = lazy(() => import("./pages/colors/page.tsx"));
 // const Accordion = lazy(() => import("./pages/accordion.tsx"))
 

@@ -10,21 +10,23 @@
 	},
 	"dependencies": {
 		"@elementals/elements": "workspace:*",
+		"clsx": "^2.1.1",
+		"lucide-react": "^0.358.0",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
-		"react-router-dom": "^7.0.2",
 		"react-rnd": "^10.4.1",
-		"lucide-react": "^0.358.0"
+		"react-router-dom": "^7.0.2",
+		"tailwind-merge": "^2.6.0"
 	},
 	"devDependencies": {
 		"@types/react": "^19.0.1",
 		"@types/react-dom": "^19.0.2",
 		"@vitejs/plugin-react": "^4.3.4",
+		"autoprefixer": "^10.4.18",
 		"globals": "^15.13.0",
-		"typescript": "^5.7.2",
-		"vite": "^6.0.3",
-		"tailwindcss": "^3.4.1",
 		"postcss": "^8.4.35",
-		"autoprefixer": "^10.4.18"
+		"tailwindcss": "^3.4.1",
+		"typescript": "^5.7.2",
+		"vite": "^6.0.3"
 	}
 }
