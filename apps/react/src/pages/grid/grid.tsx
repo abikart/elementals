@@ -32,7 +32,7 @@ export default function GridGenerator() {
 
 	const getItemWidth = useCallback((): number => {
 		if (!gridRef.current) return 0;
-		return (gridRef.current.clientWidth - gapPx * (columns - 1)) / columns;
+		return Math.floor((gridRef.current.clientWidth - gapPx * (columns - 1)) / columns);
 	}, [gapPx, columns]);
 
 	const getGridHeight = useCallback((): number => {
@@ -307,10 +307,12 @@ export default function GridGenerator() {
 			<div className="relative rounded-lg w-full my-12">
 				<div
 					ref={gridRef}
-					className={`grid font-mono text-white text-sm text-center font-bold rounded-lg w-full h-full grid-cols-${columns} grid-rows-${rows}`}
+					className={"grid font-mono text-white text-sm text-center font-bold rounded-lg w-full h-full"}
 					style={{
 						gap: `${gapPx}px`,
 						minHeight: getGridHeight(),
+						gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
+						gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`,
 					}}
 				>
 					{Array.from({ length: rows * columns }).map((_, i) => {

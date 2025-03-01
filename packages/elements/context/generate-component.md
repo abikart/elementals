@@ -13,15 +13,11 @@
 3. **Documentation First**: Document platform features being used and why custom enhancements are needed
 4. **Enhancement Patterns**: When adding features not supported by the platform:
    - Prefer ARIA attributes for state/behavior when semantically appropriate
+   - When introducing new component properties that affect behavior or state management, choose simple, intuitive names (for example, `controlled` for externally managed state) rather than using data-* prefixes.
    - Use data-* attributes for truly custom features
    - Document clearly which features are enhancements vs native
    - Explain the rationale for added features
    - Consider progressive enhancement implications
-5. **Component Structure**:
-   - Use `data-part` for internal component structure
-   - Use `data-slot` for user customization points
-   - Document all supported data-parts and data-slots
-   - Provide clear functional description
 
 Create a new component <component-name> inside the `packages/elements/src/elements` directory following these requirements:
 
@@ -44,10 +40,14 @@ Create a new component <component-name> inside the `packages/elements/src/elemen
    - disconnectedCallback()
    - attributeChangedCallback() (if using observed attributes)
 4. Bind event handlers in constructor
-5. Use data-part attributes for styling hooks
-6. Follow non-DOM mutating principles
-7. Use native events when available, only create custom events if necessary
-8. Register component with 'el-' prefix
+5. **(Optional) Support Externally Controlled State:**
+   - If the component should support a controlled/uncontrolled pattern, implement a boolean property/attribute (e.g., `controlled`) that, when present, disables the component's internal state management.
+   - In controlled mode, the component will only dispatch custom events (e.g., `el-show`, `el-hide`, etc.) to notify the consumer of state changes. It will not update the DOM (such as toggling the `open` attribute) automatically.
+   - Ensure that documentation clearly explains that in controlled mode, the consuming application is responsible for updating the state.
+6. Use data-part attributes for styling hooks
+7. Follow non-DOM mutating principles
+8. Use native events when available, only create custom events if necessary
+9. Register component with 'el-' prefix
 
 ### Styles (component-name.css)
 1. Use CSS custom properties with fallbacks

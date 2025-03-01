@@ -43,6 +43,7 @@ export function stopAnimations(el: HTMLElement) {
 	return Promise.all(
 		el.getAnimations().map((animation) => {
 			return new Promise<void>((resolve) => {
+				console.log("stopAnimations", el);
 				animation.cancel();
 				requestAnimationFrame(() => resolve());
 			});

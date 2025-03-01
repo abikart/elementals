@@ -1,6 +1,16 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+	--color-accent-500: #6366f1;
+	--color-base-100: #f3f4f6;
+	--color-base-200: #e5e7eb;
+	--color-base-300: #d1d5db;
+	--color-base-500: #6b7280;
+	--color-base-900: #111827;
+	--color-chalk: #ffffff;
+	--grid-template-column-auto-fill: repeat(auto-fill, minmax(0, 1fr));
+	--grid-template-row-auto-fill: repeat(auto-fill, minmax(0, 1fr));
+}
 
 body {
 	margin: 0;

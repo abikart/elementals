@@ -2,6 +2,26 @@
 
 An accordion is a vertically stacked set of interactive headings that each reveal a section of content. It allows users to show and hide related content, reducing visual clutter while making information easy to find and navigate.
 
+## Features
+
+- Enhances native `<details>` and `<summary>` elements with additional features
+- Uses `open` attribute of `<details>` elements for expanded state
+- Enhances grouped sections (single-expand behavior) with the native `name` attribute of `<details>` elements - [88.9%](https://caniuse.com/mdn-html_elements_details_name)
+- Uses `aria-disabled` attribute of `<details>` elements for disabled state
+- Uses custom `controlled` property of `<el-accordion>` element for controlled state
+- Animates the content with dynamic height and padding of `<details>` elements
+- Animates the expand/collapse indicators with rotation
+- Animation is tricky when using `controlled` mode, since when `open` is false, the content is not visible and there is no way right now to animate
+  - Workaround: Works only in chrome, achievable via pure CSS
+  - `::details-content` pseudo-element is styled to animate with css transitions - [67.07%](https://caniuse.com/mdn-css_selectors_details-content)
+  - `interpolate-size: allow-keywords` is used to animate the dynamic height of the content - [66.69%](https://caniuse.com/
+  mdn-css_properties_interpolate-size)
+  - `transition-behavior: allow-discrete;` is used to animate the expand/collapse indicators with rotation - [88.99%](https://caniuse.com/?search=transition-behavior)
+  - [CodePen Example](https://codepen.io/abikart/pen/GgRKMxO)
+  - When the browser users percentage improves to > 90%, animations will be migrated to be fully CSS based
+- Indicator: 
+
+
 ## Native Features
 
 The component builds on these standard HTML features:
@@ -35,7 +55,7 @@ These attributes can be added by users to customize the component:
 <el-accordion>
   <details>
     <summary>Section 1</summary>
-    <div class="content">
+    <div>
       <p>Content for section 1</p>
     </div>
   </details>
@@ -139,6 +159,7 @@ When a section is disabled:
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
 | `aria-disabled` | boolean | `false` | Prevents the section from being toggled |
+| `controlled` | boolean | `false` | Indicates that the state of the accordion is managed externally. In controlled mode, the component dispatches custom events (e.g., `el-show`, `el-hide`) without automatically toggling the `open` attribute or triggering animations; the consuming application is responsible for managing the state. |
 
 ## Events
 
@@ -369,7 +390,7 @@ el-accordion [data-part="content"] {
 <!-- Don't use wrapper classes -->
 <details>
   <summary>Title</summary>
-  <div class="content">...</div>  <!-- No need for classes -->
+  <div>...</div>  <!-- No need for classes -->
 </details>
 ```
 
