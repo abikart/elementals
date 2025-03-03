@@ -1,4 +1,4 @@
-import type { Interaction, Prominence, Usage } from "./color";
+import type { Interaction, Prominence, Usage } from ".";
 
 type InteractionMap = Partial<Record<Interaction, Mode>>;
 type ProminenceMap = Partial<Record<Prominence, InteractionMap>>;

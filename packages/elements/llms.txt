@@ -1,8 +1,0 @@
-Context about the project are located in the following files:
- - context/prd.d : Product requirements document
- - context/generate-component.md: instructions for generating a component
-
-Instructions:
- - Adhere to the product requirements document
- - Use the instructions for generating a component to generate a component
- - Update the prd.md and generate-component.md files as new changes are made

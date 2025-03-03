@@ -6,6 +6,92 @@ export default function Accordion() {
 
 	return (
 		<>
+			<h2>Uncontrolled Accordion</h2>
+			<el-accordion>
+				<details name="uncontrolled-accordion">
+					<summary>Graduation Requirements</summary>
+					<p>Requires 40 credits, including a passing grade in health, geography, history, economics, and wood shop.</p>
+				</details>
+
+				<details name="uncontrolled-accordion">
+					<summary>System Requirements</summary>
+					<p>
+						Requires a computer running an operating system. The computer must have some memory and ideally some kind of
+						long-term storage. An input device as well as some form of output device is recommended.
+					</p>
+				</details>
+
+				<details name="uncontrolled-accordion">
+					<summary>Qualifications</summary>
+					<p>Should have a degree in computer science or a related field.</p>
+				</details>
+
+				<details name="uncontrolled-accordion">
+					<summary>
+						Job Requirements
+						<svg viewBox="0 0 17 8.85" data-slot="indicator">
+							<title>open</title>
+							<polyline
+								data-accordion-icon-shape="true"
+								stroke="currentColor"
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								fill="none"
+								fillRule="evenodd"
+								points="15 1.13 8.5 7.72 2 1.13"
+							>
+								<animate
+									attributeName="points"
+									values="15 1.13 8.5 7.72 2 1.13; 15.85 4.42 8.5 4.42 1.15 4.42; 15 7.72 8.5 1.13 2 7.72"
+									dur="320ms"
+									begin="indefinite"
+									fill="freeze"
+									keyTimes="0;0.5;1"
+									calcMode="spline"
+									keySplines="0.12, 0, 0.38, 0; 0.2, 1, 0.68, 1"
+								/>
+								<animate
+									attributeName="points"
+									values="15 7.72 8.5 1.13 2 7.72; 15.85 4.42 8.5 4.42 1.15 4.42; 15 1.13 8.5 7.72 2 1.13"
+									dur="320ms"
+									begin="indefinite"
+									fill="freeze"
+									keyTimes="0;0.5;1"
+									calcMode="spline"
+									keySplines="0.2, 0, 0.68, 0; 0.2, 1, 0.68, 1"
+								/>
+							</polyline>
+						</svg>
+					</summary>
+					<div>
+						<table>
+							<thead>
+								<tr>
+									<th>Requirement</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Education</td>
+									<td>Bachelor's degree in related field</td>
+								</tr>
+								<tr>
+									<td>Experience</td>
+									<td>3+ years in similar role</td>
+								</tr>
+								<tr>
+									<td>Skills</td>
+									<td>Project management, communication, leadership</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</details>
+			</el-accordion>
+
+			<br />
+			<h2>Controlled Accordion</h2>
 			<el-accordion
 				controlled
 				onElShow={(e) => {
@@ -95,87 +181,11 @@ export default function Accordion() {
 			</el-accordion>
 
 			<br />
-			<br />
-			<el-accordion>
-				<details name="uncontrolled-accordion">
-					<summary>Graduation Requirements</summary>
-					<p>Requires 40 credits, including a passing grade in health, geography, history, economics, and wood shop.</p>
-				</details>
-
-				<details name="uncontrolled-accordion">
-					<summary>System Requirements</summary>
-					<p>
-						Requires a computer running an operating system. The computer must have some memory and ideally some kind of
-						long-term storage. An input device as well as some form of output device is recommended.
-					</p>
-				</details>
-
-				<details name="uncontrolled-accordion">
-					<summary>Qualifications</summary>
-					<p>Should have a degree in computer science or a related field.</p>
-				</details>
-
-				<details name="uncontrolled-accordion">
-					<summary>
-						Job Requirements
-						<svg viewBox="0 0 17 8.85" data-slot="indicator">
-							<title>open</title>
-							<polyline
-								data-accordion-icon-shape="true"
-								stroke="currentColor"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								fill="none"
-								fillRule="evenodd"
-								points="15 1.13 8.5 7.72 2 1.13"
-							>
-								<animate
-									attributeName="points"
-									values="15 1.13 8.5 7.72 2 1.13; 15.85 4.42 8.5 4.42 1.15 4.42; 15 7.72 8.5 1.13 2 7.72"
-									dur="320ms"
-									begin="indefinite"
-									fill="freeze"
-									keyTimes="0;0.5;1"
-									calcMode="spline"
-									keySplines="0.12, 0, 0.38, 0; 0.2, 1, 0.68, 1"
-								/>
-								<animate
-									attributeName="points"
-									values="15 7.72 8.5 1.13 2 7.72; 15.85 4.42 8.5 4.42 1.15 4.42; 15 1.13 8.5 7.72 2 1.13"
-									dur="320ms"
-									begin="indefinite"
-									fill="freeze"
-									keyTimes="0;0.5;1"
-									calcMode="spline"
-									keySplines="0.2, 0, 0.68, 0; 0.2, 1, 0.68, 1"
-								/>
-							</polyline>
-						</svg>
-					</summary>
-					<div>
-						<table>
-							<thead>
-								<tr>
-									<th>Requirement</th>
-									<th>Description</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>Education</td>
-									<td>Bachelor's degree in related field</td>
-								</tr>
-								<tr>
-									<td>Experience</td>
-									<td>3+ years in similar role</td>
-								</tr>
-								<tr>
-									<td>Skills</td>
-									<td>Project management, communication, leadership</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
+			<h2>Experimental Accordion</h2>
+			<el-accordion experimental>
+				<details name="experimental-accordion">
+					<summary>Experimental Accordion</summary>
+					<p>This is an experimental accordion.</p>
 				</details>
 			</el-accordion>
 		</>

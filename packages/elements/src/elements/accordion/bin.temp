@@ -1,0 +1,27 @@
+export interface ElAccordionEventMap {
+	ElShow: CustomEvent<{ open: boolean; target: HTMLDetailsElement }>;
+	ElHide: CustomEvent<{ open: boolean; target: HTMLDetailsElement }>;
+	ElAfterShow: CustomEvent<{ open: boolean; target: HTMLDetailsElement }>;
+	ElAfterHide: CustomEvent<{ open: boolean; target: HTMLDetailsElement }>;
+}
+
+export interface ElAccordionElement extends HTMLElement {
+	controlled: boolean;
+	experimental: boolean;
+	addEventListener<K extends keyof ElAccordionEventMap>(
+		type: K,
+		listener: (this: ElAccordionElement, ev: ElAccordionEventMap[K]) => any,
+		options?: boolean | AddEventListenerOptions,
+	): void;
+	removeEventListener<K extends keyof ElAccordionEventMap>(
+		type: K,
+		listener: (this: ElAccordionElement, ev: ElAccordionEventMap[K]) => any,
+		options?: boolean | EventListenerOptions,
+	): void;
+}
+
+declare global {
+	interface HTMLElementTagNameMap {
+		"el-accordion": ElAccordionElement;
+	}
+}

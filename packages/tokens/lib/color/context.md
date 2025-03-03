@@ -1,4 +1,4 @@
-# Color Token System Design
+# Color Token Context
 
 ## Overview
 A semantic color system that builds on primitive colors to create meaningful, contextual tokens for UI components. The system supports theming and dark mode.

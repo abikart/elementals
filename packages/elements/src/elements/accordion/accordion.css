@@ -20,7 +20,8 @@ el-accordion {
 
 	/* Indicator */
 	--el-accordion-indicator-size: var(--el-icon-size-1, 1rem);
-	--el-accordion-indicator-rotate: 90deg;
+	--el-accordion-indicator-rotate-open: 90deg;
+	--el-accordion-indicator-rotate-closed: 0deg;
 	/* States */
 	--el-accordion-disabled-opacity: var(--el-opacity-disabled, 0.6);
 
@@ -28,6 +29,10 @@ el-accordion {
 	--el-accordion-duration: var(--el-duration-2, 200ms);
 	--el-accordion-easing: var(--el-easing-standard, ease-in-out);
 	--el-accordion-rotate: 1; /* Toggle rotation animation */
+
+	* {
+		box-sizing: border-box;
+	}
 
 	details {
 		border: var(--el-accordion-border-width) solid var(--el-accordion-border-color);
@@ -66,6 +71,7 @@ el-accordion {
 				transform-origin: center;
 			}
 			[data-slot="indicator"] {
+				transform: rotate(var(--el-accordion-indicator-rotate-closed));
 				transition: transform var(--el-accordion-duration) var(--el-accordion-easing);
 			}
 			[data-slot="indicator-closed"] {
@@ -77,36 +83,33 @@ el-accordion {
 		}
 
 		[data-part="content"] {
-			display: flex;
-			align-items: center;
+			margin: 0;
+			padding: 0;
 			background: var(--el-accordion-bg);
 			color: var(--el-accordion-color);
-			padding-block-start: 0px;
-			padding-block-end: 0px;
+			padding-block-start: var(--el-accordion-padding);
+			padding-block-end: var(--el-accordion-padding);
 			padding-inline-start: var(--el-accordion-padding);
 			padding-inline-end: var(--el-accordion-padding);
 			overflow: hidden;
 			transition: none;
-			&[data-animatedShow] {
-				transition-property: block-size, opacity;
-				transition-duration: var(--el-accordion-duration);
-				transition-timing-function: var(--el-accordion-easing);
+		}
+
+		&[data-hiding][open] {
+			[data-slot="indicator"] {
+				transform: rotate(var(--el-accordion-indicator-rotate-closed));
 			}
 		}
 
 		&[open] {
 			[data-slot="indicator"] {
-				transform: rotate(var(--el-accordion-indicator-rotate));
+				transform: rotate(var(--el-accordion-indicator-rotate-open));
 			}
 			[data-slot="indicator-closed"] {
 				display: none;
 			}
 			[data-slot="indicator-open"] {
 				display: flex;
-			}
-			[data-part="content"] {
-				padding-block-start: var(--el-accordion-padding);
-				padding-block-end: var(--el-accordion-padding);
 			}
 		}
 
@@ -123,7 +126,7 @@ el-accordion {
 		}
 	}
 
-	&[controlled] {
+	&[experimental] {
 		details {
 			&::details-content {
 				block-size: 0;
@@ -143,6 +146,7 @@ el-accordion {
 			&[open] {
 				&::details-content {
 					block-size: auto; /* Fallback for browsers that don't support calc-size() function */
+					/* biome-ignore lint/correctness/noUnknownFunction: available in chrome and edge */
 					block-size: calc-size(auto, size); /* calc-size() function allows transition to height: auto; */
 				}
 				[data-part="content"] {

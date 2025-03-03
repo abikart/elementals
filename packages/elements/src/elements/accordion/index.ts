@@ -1,4 +1,4 @@
-import styles from "./accordion.css?raw";
+import styles from "./accordion.css?inline";
 
 // Create our shared stylesheet:
 const sheet = new CSSStyleSheet();

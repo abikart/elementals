@@ -1,0 +1,28 @@
+{
+	"name": "@elementals/tokens",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"exports": {
+		"./color/css": "./dist/color.css",
+		"./color": {
+			"import": "./dist/color/index.js",
+			"types": "./dist/color/index.d.ts"
+		},
+		"./primitives": {
+			"import": "./dist/color/primitives.js",
+			"types": "./dist/color/primitives.d.ts"
+		}
+	},
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc && vite build",
+		"preview": "vite preview"
+	},
+	"devDependencies": {
+		"colorjs.io": "^0.5.2",
+		"typescript": "~5.7.2",
+		"vite": "^6.2.0",
+		"vite-plugin-dts": "^4.5.1"
+	}
+}

@@ -10,6 +10,7 @@
 	},
 	"dependencies": {
 		"@elementals/elements": "workspace:*",
+		"@elementals/tokens": "workspace:*",
 		"clsx": "^2.1.1",
 		"lucide-react": "^0.358.0",
 		"react": "^19.0.0",

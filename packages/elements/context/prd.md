@@ -7,49 +7,109 @@ A comprehensive library of HTML Custom Elements designed to enhance standard HTM
 ## Table of Contents
 
 1. [Core Principles](#core-principles)
-2. [Component Design Guidelines](#component-design-guidelines)
-3. [Implementation Details](#implementation-details)
-4. [Framework Integration and Type Safety](#framework-integration-and-type-safety)
-5. [Theming with CSS Custom Properties](#theming-with-css-custom-properties)
-6. [Interactivity via State Machines](#interactivity-via-state-machines)
-7. [Accessibility Features](#accessibility-features)
+2. [Quick Start Guide](#quick-start-guide)
+3. [Component Design Guidelines](#component-design-guidelines)
+4. [Implementation Details](#implementation-details)
+5. [Framework Integration and Type Safety](#framework-integration-and-type-safety)
+6. [Theming System](#theming-system)
+7. [Accessibility](#accessibility)
 8. [Performance Optimization](#performance-optimization)
-9. [RTL Support](#rtl-support)
-10. [Non-DOM Mutating Behavior](#non-dom-mutating-behavior)
-11. [Event Handling](#event-handling)
-12. [Testing and Quality Assurance](#testing-and-quality-assurance)
-13. [Internationalization and Localization](#internationalization-and-localization)
-14. [Usage Example](#usage-example)
+9. [Internationalization and RTL Support](#internationalization-and-rtl-support)
+10. [Testing and Quality Assurance](#testing-and-quality-assurance)
+11. [Troubleshooting](#troubleshooting)
+12. [Usage Examples](#usage-examples)
 
 ---
 
 ## Core Principles
 
-### Priority Order
+Here are the core principles in the order of priority:
 
-1. **AI Native**: Components are designed to be easily understood and utilized by AI agents, facilitating AI applications with adaptive and generative UI experiences.
+- **First Principles**: Components separate static (built-in) from dynamic (configurable) features
+- **AI Native**: Components are designed to be easily understood and utilized by AI agents, facilitating AI applications with adaptive and generative UI experiences
+- **HTML Element Extensions**: Each component is an HTML Custom Element with an `el-` prefix (e.g., `<el-form>`, `<el-accordion>`), extending native HTML elements, enhancing familiarity and ease of use
+- **No dependencies**: Components rely only on platform APIs
+- **Theming with CSS Custom Properties**: Utilize CSS Custom Properties for theming, allowing flexible and customizable styling that can be overridden or extended by users
+- **Accessibility First**: Accessibility is integral. Components adhere to WCAG guidelines, leveraging the Accessibility Object Model (AOM) APIs to ensure inclusive user experiences
+- **Interactivity via State Machines**: Handle interactivity using lightweight state machines for predictable and maintainable state management
+- **Framework Agnostic**: Components are usable across different frontend frameworks (React, Angular, Vue, etc.) without dependencies, enabling seamless integration
+- **No Shadow DOM**: Avoid using Shadow DOM to enhance performance, improve server-side rendering (SSR) compatibility, and maintain a semantic, readable DOM structure
+- **Progressive Enhancement**: Components function without JavaScript (no-op behavior) and are progressively enhanced when JavaScript is available
+- **Non-DOM Mutating**: Enhance existing elements with interactivity and theming without altering the DOM structure
+- **Performance Optimization**: Optimize components for minimal impact on load times and runtime performance, supporting lazy loading and efficient rendering
+- **RTL Support**: Fully support right-to-left (RTL) text direction, enabling use in internationalized applications
+- **Type Safety**: Provide TypeScript declarations to ensure type safety across different frameworks, improving developer experience and reducing runtime errors
 
-2. **HTML Custom Elements**: Each component is an HTML Custom Element with an `el-` prefix (e.g., `<el-form>`, `<el-accordion>`), enhancing familiarity and ease of use.
+---
 
-3. **Theming with CSS Custom Properties**: Utilize CSS Custom Properties for theming, allowing flexible and customizable styling that can be overridden or extended by users.
+## Quick Start Guide
 
-4. **Accessibility First**: Accessibility is integral. Components adhere to WCAG guidelines, leveraging the Accessibility Object Model (AOM) APIs to ensure inclusive user experiences.
+### Installation
 
-5. **Interactivity via State Machines**: Handle interactivity using lightweight state machines (e.g., Zag.js) for predictable and maintainable state management.
+```bash
+npm install @elementals/elements
+```
 
-6. **Framework Agnostic**: Components are usable across different frontend frameworks (React, Angular, Vue, etc.) without dependencies, enabling seamless integration.
+### Basic Usage
 
-7. **No Shadow DOM**: Avoid using Shadow DOM to enhance performance, improve server-side rendering (SSR) compatibility, and maintain a semantic, readable DOM structure.
+```html
+<!-- Import the components you need -->
+<script type="module">
+  import '@elementals/elements/accordion';
+</script>
 
-8. **Progressive Enhancement**: Components function without JavaScript (no-op behavior) and are progressively enhanced when JavaScript is available.
+<!-- Use the component in your HTML -->
+<el-accordion>
+  <details>
+    <summary>Expandable Section</summary>
+    <p>Content goes here</p>
+  </details>
+</el-accordion>
+```
 
-9. **Non-DOM Mutating**: Enhance existing elements with interactivity and theming without altering the DOM structure.
+### Framework Integration
 
-10. **Performance Optimization**: Optimize components for minimal impact on load times and runtime performance, supporting lazy loading and efficient rendering.
+#### React
 
-11. **RTL Support**: Fully support right-to-left (RTL) text direction, enabling use in internationalized applications.
+```jsx
+import '@elementals/elements/accordion';
 
-12. **Type Safety**: Provide TypeScript declarations to ensure type safety across different frameworks, improving developer experience and reducing runtime errors.
+function MyComponent() {
+  return (
+    <el-accordion onElToggle={(e) => console.log(e.detail)}>
+      <details>
+        <summary>Expandable Section</summary>
+        <p>Content goes here</p>
+      </details>
+    </el-accordion>
+  );
+}
+```
+
+#### Vue
+
+```vue
+<template>
+  <el-accordion @el-toggle="handleToggle">
+    <details>
+      <summary>Expandable Section</summary>
+      <p>Content goes here</p>
+    </details>
+  </el-accordion>
+</template>
+
+<script>
+import '@elementals/elements/accordion';
+
+export default {
+  methods: {
+    handleToggle(event) {
+      console.log(event.detail);
+    }
+  }
+}
+</script>
+```
 
 ---
 
@@ -60,46 +120,37 @@ A comprehensive library of HTML Custom Elements designed to enhance standard HTM
 - **Prefix**: All components use the `el-` prefix.
 - **Naming**: Names are descriptive and reflect the component's functionality (e.g., `<el-accordion>`, `<el-modal>`).
 
-### Structure and Styling
+### Static vs. Dynamic Features
+
+- **Static**: Basic styling, HTML structure, accessibility attributes
+- **Dynamic**: Concise declarative API exposed via properties, CSS custom properties, and events
+
+### Structure
 
 - **Semantic HTML**: Encourage the use of semantic HTML within components.
 - **Display Property**: Use `display: contents` to avoid affecting layout.
 - **Style Encapsulation**: Use `[data-part]` attribute selectors to encapsulate styles within components, allowing theming of specific parts.
 - **Content Structure**: Define and document explicit content structure requirements for components.
 
-### Theming and Styling
+### Event Handling
 
-- **CSS Custom Properties**: Define CSS variables for all customizable styles.
-- **Property Naming Convention**:
-  - Use `--el-<component>-<property>` format for component-specific properties
-  - Properties should fall back to global theme tokens (e.g., `var(--el-surface-1, #fff)`)
-  - Group properties by category (theme, layout, states, animation)
-  - Document all properties with their purpose and default values
-- **Content Wrappers**:
-  - Prefer semantic structure over utility classes
-  - Document required wrapper elements for optimal component behavior
-- **Default Theme**: Provide a minimal default theme that can be extended or overridden by users.
-- **Theme Application**: Allow themes to be applied globally or scoped to specific components.
+- **Custom Events**: Emit events when the component state changes.
+- **Naming Convention**: Events are named using the `ElEventName` format (e.g., `ElToggle`). We follow this convention so it works well with the `onElEventName` listener used in templates and frameworks like React (version 19+).
+- **Standard Event Emission**: Emit events that are composed and bubble up the DOM.
 
-### Interactivity
-
-- **State Machines**: Implement interactivity using state machines for consistency and predictability.
-- **Event Handling**: Emit standard DOM events for interactions, following consistent naming conventions.
-- **Non-Intrusive**: Enhance elements without altering their fundamental behaviors or DOM structure.
-
-### Accessibility
-
-- **AOM and ARIA**: Use Accessibility Object Model APIs and ARIA attributes to communicate with assistive technologies.
-- **Keyboard Navigation**: Ensure components are fully operable via keyboard inputs.
-- **Focus Management**: Appropriately manage focus during interactions to provide a seamless user experience.
+```javascript
+this.dispatchEvent(new CustomEvent('ElToggle', {
+  detail: { open: !expanded },
+  bubbles: true,
+  composed: true,
+}));
+```
 
 ---
 
 ## Implementation Details
 
-Detailed implementation guidelines for `@elementals/elements`, covering key requirements and usage examples.
-
-### 1. HTML Custom Elements
+### HTML Custom Elements
 
 #### Definition and Registration
 
@@ -118,7 +169,9 @@ class ElAccordion extends HTMLElement {
 
   connectedCallback() {
     // Invoked when the element is added to the document
-    this.initialize();
+    queueMicrotask(() => {
+      this.initialize();
+    });
   }
 
   initialize() {
@@ -129,48 +182,54 @@ class ElAccordion extends HTMLElement {
 customElements.define('el-accordion', ElAccordion);
 ```
 
+### Properties and Methods
+
+- **Properties**: Use standard DOM properties for component configurations.
+- **Property Reflection**: Reflect attributes to properties and vice versa only where appropriate. Prefer properties over attributes for configuration.
+- **Methods**: Expose methods sparingly, primarily for imperative actions like `focus()` which are not easily achievable with declarative APIs.
+
+### Non-DOM Mutating Behavior
+
+- **Enhancements Without Alteration**: Enhance existing elements by adding event listeners and attributes without modifying the DOM hierarchy.
+
+```javascript
+connectedCallback() {
+  const items = this.querySelectorAll('details');
+  items.forEach((item) => {
+    item.setAttribute('data-part', 'item');
+    item.addEventListener('toggle', this.onToggle);
+  });
+}
+
+onToggle = (event) => {
+  // Handle toggle event
+};
+```
+
 ---
 
-### 2. Properties, Methods, and Events
+## Framework Integration and Type Safety
 
-#### Properties
-
-- Use standard DOM properties for component configurations.
-- Reflect attributes to properties and vice versa where appropriate.
-
-#### Methods
-
-- Expose methods sparingly, primarily for imperative actions like `focus()` which are not easily achievable with declarative APIs.
-
-#### Events
-
-- **Custom Events**: Emit events when the component state changes.
-- **Naming Convention**: Events are named using the `ElEventName` format (e.g., `ElToggle`). We follow this convention so it works well with the `onElEventName` listener used in templates and frameworks like React (version 19+). (TODO: research alternatives)
-
----
-
-### 3. Framework Integration and Type Safety
-
-#### TypeScript Definitions
+### TypeScript Definitions
 
 - **Declaration Files**: Provide `.d.ts` files for all components.
-- **Framework-Specific Types**: Offer type definitions tailored for React, Angular, Vue, etc.
+- **Framework-Specific Types**: Offer type definitions tailored for React, Angular, Vue, etc. Eg: `el-accordion.react.d.ts`
 - **Global Declarations**: Include component interfaces in a global declaration to aid tooling.
 
-##### Example
+#### Example
 
 ```typescript
 // el-accordion.d.ts
 export class ElAccordion extends HTMLElement {}
 ```
 
-#### React Integration
+### React Integration
 
 - **Type Definitions**: Create React-specific type definitions.
 
-##### Example
+#### Example
 
-```tsx
+```typescript
 // el-accordion.react.d.ts
 import * as React from 'react';
 
@@ -188,37 +247,20 @@ declare global {
 }
 ```
 
-#### Usage in React App
-
-```tsx
-// App.jsx
-function App() {
-  const handleToggle = (event) => {
-    console.log('Accordion toggled:', event.detail.open);
-  };
-
-  return (
-    <el-accordion onElToggle={handleToggle}>
-      <details>
-        <summary>Item One</summary>
-        <p>Details for item one.</p>
-      </details>
-    </el-accordion>
-  );
-}
-
-export default App;
-```
-
 ---
 
-### 4. Theming with CSS Custom Properties
+## Theming System
 
-#### Defining Custom Properties
+### CSS Custom Properties
 
-- **Component Styles**: Use CSS variables for all style properties within components.
+- **Component-Specific Variables**: Define CSS variables for all customizable styles.
+- **Property Naming Convention**:
+  - Use `--el-<component>-<property>` format for component-specific properties
+  - Properties should fall back to global theme tokens (e.g., `var(--el-surface-1, #fff)`)
+  - Group properties by category (theme, layout, states, animation)
+  - Document all properties with their purpose and default values
 
-##### Example
+#### Example
 
 ```css
 /* el-accordion.css */
@@ -234,11 +276,13 @@ export default App;
 }
 ```
 
-#### Theme Application
+### Theme Application
 
 - **Global Theme Overrides**: Users can override default variables in their stylesheets.
+- **Default Theme**: Provide a minimal default theme that can be extended or overridden by users.
+- **Theme Application**: Allow themes to be applied globally or scoped to specific components.
 
-##### Example
+#### Example
 
 ```css
 /* theme.css */
@@ -249,50 +293,21 @@ el-accordion {
 }
 ```
 
----
+### Content Wrappers
 
-### 5. Interactivity via State Machines
-
-#### State Machine Implementation
-
-- **Library Usage**: Use lightweight libraries like Zag.js for defining state machines.
-- **Predictable States**: Clearly define states and transitions for consistent behavior.
-
-##### Example
-
-```javascript
-import { createMachine, interpret } from '@zag-js/core';
-
-const accordionMachine = createMachine({
-  id: 'accordion',
-  initial: 'collapsed',
-  states: {
-    collapsed: {
-      on: { TOGGLE: 'expanded' },
-    },
-    expanded: {
-      on: { TOGGLE: 'collapsed' },
-    },
-  },
-});
-
-// In the component
-this.machine = interpret(accordionMachine).onTransition((state) => {
-  // Update UI based on state
-});
-this.machine.start();
-```
+- **Semantic Structure**: Prefer semantic structure over utility classes
+- **Required Elements**: Document required wrapper elements for optimal component behavior
 
 ---
 
-### 6. Accessibility Features
+## Accessibility
 
-#### AOM and ARIA Support
+### AOM and ARIA Support
 
 - **Roles and Properties**: Apply appropriate `role`, `aria-*`, and `tabindex` attributes.
 - **State Reflection**: Update ARIA attributes based on component state.
 
-##### Example
+#### Example
 
 ```javascript
 connectedCallback() {
@@ -311,11 +326,11 @@ handleClick = () => {
 };
 ```
 
-#### Keyboard Navigation
+### Keyboard Navigation
 
 - **Keyboard Interactions**: Implement key event handlers for standard navigation.
 
-##### Example
+#### Example
 
 ```javascript
 this.addEventListener('keydown', (event) => {
@@ -326,15 +341,20 @@ this.addEventListener('keydown', (event) => {
 });
 ```
 
+### Focus Management
+
+- **Focus Handling**: Appropriately manage focus during interactions to provide a seamless user experience.
+- **Focus Trapping**: Implement focus trapping for modal components to ensure keyboard users can't tab outside of active modals.
+
 ---
 
-### 7. Performance Optimization
+## Performance Optimization
 
-#### Lazy Loading Components
+### Lazy Loading Components
 
 - **Dynamic Imports**: Load component scripts only when they are needed.
 
-##### Example
+#### Example
 
 ```html
 <!-- In the HTML -->
@@ -345,20 +365,20 @@ this.addEventListener('keydown', (event) => {
 </script>
 ```
 
-#### Efficient Rendering
+### Efficient Rendering
 
 - **Batch Updates**: Use requestAnimationFrame or microtasks to batch DOM updates.
 - **Avoid Layout Thrashing**: Minimize synchronous layout reads and writes.
 
 ---
 
-### 8. RTL Support
+## Internationalization and RTL Support
 
-#### CSS Logical Properties
+### RTL Layout
 
-- **Universal Layout**: Use logical properties (`margin-inline-start`, `padding-block-end`, etc.) for automatic RTL adaptation.
+- **CSS Logical Properties**: Use logical properties (`margin-inline-start`, `padding-block-end`, etc.) for automatic RTL adaptation.
 
-##### Example
+#### Example
 
 ```css
 [data-part="header"] {
@@ -367,11 +387,11 @@ this.addEventListener('keydown', (event) => {
 }
 ```
 
-#### Direction Detection
+### Direction Detection
 
 - **Dynamic Adjustments**: Observe `dir` attribute changes to adjust styles and behaviors.
 
-##### Example
+#### Example
 
 ```javascript
 const updateDirection = () => {
@@ -385,58 +405,39 @@ observer.observe(document.documentElement, { attributes: true, attributeFilter: 
 updateDirection();
 ```
 
----
+### Language Support
 
-### 9. Non-DOM Mutating Behavior
+- **`lang` Attribute Respect**: Adjust component behavior based on the document's `lang` attribute if necessary.
 
-#### Enhancements Without Alteration
-
-- **Event Listeners**: Enhance existing elements by adding event listeners and attributes without modifying the DOM hierarchy.
-
-##### Example
+#### Example
 
 ```javascript
-connectedCallback() {
-  const items = this.querySelectorAll('details');
-  items.forEach((item) => {
-    item.setAttribute('data-part', 'item');
-    item.addEventListener('toggle', this.onToggle);
-  });
-}
+const lang = document.documentElement.lang || navigator.language || 'en';
+// Use `lang` variable as needed
+```
 
-onToggle = (event) => {
-  // Handle toggle event
-};
+### Date and Number Formatting
+
+- **Intl API**: Utilize the Internationalization API for locale-specific formatting.
+
+#### Example
+
+```javascript
+const formatter = new Intl.NumberFormat(lang, { style: 'currency', currency: 'USD' });
+const formattedNumber = formatter.format(1000);
+// Use formattedNumber in the component
 ```
 
 ---
 
-### 10. Event Handling
+## Testing and Quality Assurance
 
-#### Standard Event Emission
-
-- **Custom Events**: Emit events that are composed and bubble up the DOM.
-
-##### Example
-
-```javascript
-this.dispatchEvent(new CustomEvent('ElToggle', {
-  detail: { open: !expanded },
-  bubbles: true,
-  composed: true,
-}));
-```
-
----
-
-### 11. Testing and Quality Assurance
-
-#### Unit Testing
+### Unit Testing
 
 - **Testing Frameworks**: Use Jest for JavaScript unit tests.
 - **Coverage**: Ensure all logic branches and states are tested.
 
-##### Example
+#### Example
 
 ```javascript
 // el-accordion.test.js
@@ -450,43 +451,44 @@ test('toggles aria-expanded attribute on click', () => {
 });
 ```
 
-#### Accessibility Testing
+### Accessibility Testing
 
 - **Automation Tools**: Integrate Axe or Lighthouse for automated accessibility checks.
 - **Manual Testing**: Perform manual tests with screen readers and keyboard navigation.
 
----
+### Visual Regression Testing
 
-### 12. Internationalization and Localization
-
-#### Language Support
-
-- **`lang` Attribute Respect**: Adjust component behavior based on the document's `lang` attribute if necessary.
-
-##### Example
-
-```javascript
-const lang = document.documentElement.lang || navigator.language || 'en';
-// Use `lang` variable as needed
-```
-
-#### Date and Number Formatting
-
-- **Intl API**: Utilize the Internationalization API for locale-specific formatting.
-
-##### Example
-
-```javascript
-const formatter = new Intl.NumberFormat(lang, { style: 'currency', currency: 'USD' });
-const formattedNumber = formatter.format(1000);
-// Use formattedNumber in the component
-```
+- **Snapshot Testing**: Use snapshot testing to ensure the DOM structure and styles are consistent.
 
 ---
 
-## Usage Example
+## Troubleshooting
 
-An example demonstrating how to use the `@elementals/elements` library in different frontend frameworks.
+### Common Issues
+
+#### Components not rendering
+- Ensure you've imported the component correctly
+- Check browser console for any JavaScript errors
+- Verify that your bundler is configured to handle ES modules
+
+#### Styling issues
+- Check that your CSS custom properties are correctly defined
+- Inspect the component with browser dev tools to verify CSS inheritance
+- Ensure no CSS reset is conflicting with component styles
+
+#### Framework integration problems
+- For React: Make sure you're using the correct event naming (`onElToggle` not `oneltoggle`)
+- For Angular: Ensure you've added `CUSTOM_ELEMENTS_SCHEMA` to your module
+- For Vue: Check that you're using kebab-case for event listeners (`@el-toggle`)
+
+### Getting Help
+- File issues on our GitHub repository
+- Join our Discord community for real-time help
+- Check the documentation for detailed guides
+
+---
+
+## Usage Examples
 
 ### HTML Example
 
@@ -530,70 +532,56 @@ An example demonstrating how to use the `@elementals/elements` library in differ
 </html>
 ```
 
-### React Example
+### Form Component Example
 
-```tsx
-// App.jsx
-function App() {
-  const handleToggle = (event) => {
-    console.log('Accordion toggled:', event.detail.open);
-  };
-
-  return (
-    <el-accordion onElToggle={handleToggle}>
-      <details>
-        <summary>Item One</summary>
-        <p>Details for item one.</p>
-      </details>
-    </el-accordion>
-  );
-}
+```html
+<el-form validate-on="change">
+  <form>
+    <div>
+      <label for="name">Name</label>
+      <input id="name" name="name" required minlength="2" />
+    </div>
+    <div>
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" required />
+    </div>
+    <button type="submit">Submit</button>
+  </form>
+</el-form>
 ```
 
-### Angular Example
+### Modal Component Example
 
-```ts
-// app.component.ts
-import { Component } from '@angular/core';
+```html
+<button id="open-modal">Open Modal</button>
 
-@Component({
-  selector: 'app-root',
-  template: `<el-accordion (elToggle)="handleToggle($event)"></el-accordion>`,
-})
-export class AppComponent {
-  handleToggle(event: CustomEvent) {
-    console.log('Accordion toggled:', event.detail.open);
-  }
-}
-
-// app.module.ts
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { AppComponent } from './app.component';
-
-@NgModule({
-  declarations: [AppComponent],
-  imports: [BrowserModule],
-  bootstrap: [AppComponent],
-})
-export class AppModule { }
-
-// index.html
-<app-root></app-root>
-```
-
-### Vue Example
-
-```vue
-// App.vue
-<template>
-  <el-accordion @el-toggle="handleToggle" />
-</template>
+<el-modal id="my-modal" aria-labelledby="modal-title">
+  <div role="dialog">
+    <header>
+      <h2 id="modal-title">Modal Title</h2>
+      <button data-close>×</button>
+    </header>
+    <div>
+      <p>Modal content goes here.</p>
+    </div>
+    <footer>
+      <button data-close>Close</button>
+      <button>Save Changes</button>
+    </footer>
+  </div>
+</el-modal>
 
 <script>
-export default {
-  methods: { handleToggle(event) { console.log('Accordion toggled:', event.detail.open); } }
-}
+  const openButton = document.getElementById('open-modal');
+  const modal = document.getElementById('my-modal');
+  
+  openButton.addEventListener('click', () => {
+    modal.open = true;
+  });
+  
+  modal.addEventListener('ElClose', () => {
+    console.log('Modal closed');
+  });
 </script>
 ```
 

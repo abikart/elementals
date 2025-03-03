@@ -5,10 +5,10 @@ import {
 	accentPaletteDefinitions,
 	accents,
 	neutralPaletteDefinitions,
-} from "@elementals/elements/color";
+} from "@elementals/tokens/color";
 import { useState } from "react";
 import "./palette.css";
-import "@elementals/elements/color.css";
+import "@elementals/tokens/color/css";
 
 const paletteDefinitions = {
 	...neutralPaletteDefinitions,

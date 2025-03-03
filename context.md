@@ -10,11 +10,12 @@ Elementals is a zero-dependency web component library built on native HTML eleme
 - **Advanced Theming**: Multi-tiered token system with premium brand themes
 - **Figma Integration**: Bidirectional synchronization between code and design tools
 - **LLM-Optimized**: Structured for AI understanding and generation of UI components
+[Read more](packages/elements/context.md)
 
 ## Core Architecture
 
 - **First Principles**: Components separate static (built-in) from dynamic (configurable) features
-- **Implementation Approach**: Web component wrappers around native HTML elements, no Shadow DOM
+- **Implementation Approach**: Custom element extensions for native HTML elements, no Shadow DOM
 
 ## Design System
 
@@ -41,6 +42,6 @@ The core component library is open source, with monetization through premium the
 ## Context Organization
 
 - **Repository Level**: /llms.txt.md (this file) provides the global overview
-- **Package Level**: Each package/subdirectory might have a context.md file with domain-specific information
+- **Package Level**: Each package/subdirectory might have a `context` directory and a `llms.txt.md` file with domain-specific information
 - **Component Level**: Individual component files contain detailed implementation context
 - **Usage**: These context files are designed for developers and LLMs to quickly understand project architecture

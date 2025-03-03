@@ -1,17 +1,4 @@
-// TODO: optimize raw loader to remove spaces in css
-import styles from "./button.css?raw";
-
-const sheet = new CSSStyleSheet();
-sheet
-	.replace(styles)
-	.then(() => {
-		document.adoptedStyleSheets.push(sheet);
-	})
-	.catch((err) => {
-		console.error("Failed to replace styles:", err);
-	});
-
-class Button extends HTMLElement {
+export class ElButton extends HTMLElement {
 	connectedCallback() {
 		queueMicrotask(() => {
 			this.mount();
@@ -21,4 +8,6 @@ class Button extends HTMLElement {
 	mount() {}
 }
 
-export default Button;
+if (!customElements.get("el-button")) {
+	customElements.define("el-button", ElButton);
+}

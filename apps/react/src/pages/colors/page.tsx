@@ -3,7 +3,7 @@ import {
 	checkContrast,
 	generateAccessibilityMatrix,
 	primitives,
-} from "@elementals/elements/color/primitives";
+} from "@elementals/tokens/primitives";
 import React, { useState, useEffect } from "react";
 
 const lightStyles = {

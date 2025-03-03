@@ -1,16 +1,30 @@
 import { animate, getComputedDuration, stopAnimations } from "../../utilities/animation";
+import { createEventController } from "../../utilities/events";
 
 interface ExtendedHTMLDetailsElement extends HTMLDetailsElement {
 	__el?: unknown;
 }
 
+// Define event types
+interface AccordionEventMap {
+	ElShow: CustomEvent<{ open: boolean; target: HTMLDetailsElement }>;
+	ElHide: CustomEvent<{ open: boolean; target: HTMLDetailsElement }>;
+	ElAfterShow: CustomEvent<{ open: boolean; target: HTMLDetailsElement }>;
+	ElAfterHide: CustomEvent<{ open: boolean; target: HTMLDetailsElement }>;
+}
+
 export class ElAccordion extends HTMLElement {
-	private items: HTMLCollectionOf<ExtendedHTMLDetailsElement> | null = null;
+	private detailsList: HTMLCollectionOf<ExtendedHTMLDetailsElement> | null = null;
 	private observer: MutationObserver | null = null;
+	private events = createEventController(this);
 
 	constructor() {
 		super();
 		this.handleClick = this.handleClick.bind(this);
+	}
+
+	static get observedAttributes() {
+		return ["controlled", "experimental"];
 	}
 
 	/**
@@ -35,9 +49,37 @@ export class ElAccordion extends HTMLElement {
 		}
 	}
 
+	/**
+	 * @property {boolean} experimental - Enable experimental features.
+	 * @default false
+	 * @details
+	 * Uses modern CSS transition features like calc-size(), transition-behavior: allow-discrete, auto block-size etc. instead of Web Animations API.
+	 */
+	private _experimental = false;
+	get experimental() {
+		return this._experimental;
+	}
+	set experimental(value: boolean) {
+		this._experimental = value;
+		if (value) {
+			this.setAttribute("experimental", "");
+		} else {
+			this.removeAttribute("experimental");
+		}
+	}
+
+	attributeChangedCallback(name: string, _: string, newValue: string) {
+		if (name === "experimental") {
+			this._experimental = newValue === "";
+		}
+		if (name === "controlled") {
+			this._controlled = newValue === "";
+		}
+	}
+
 	connectedCallback() {
 		// Live HTMLcollection of details elements
-		this.items = this.getElementsByTagName("details");
+		this.detailsList = this.getElementsByTagName("details");
 		this.setupItems();
 
 		this.observer = new MutationObserver((mutations) => {
@@ -53,34 +95,15 @@ export class ElAccordion extends HTMLElement {
 
 	disconnectedCallback() {
 		this.observer?.disconnect();
-		for (const item of this.items || []) {
-			item.removeEventListener("click", this.handleClick);
-		}
+		this.events.abort(); // Cancel all event listeners at once
 	}
 
 	private setupItems() {
-		for (const item of this.items || []) {
-			if (item.__el) return;
-			item.__el = {};
-			item.dataset.part = "item";
-			item.addEventListener("click", this.handleClick, { capture: true });
-
-			const summary = item.querySelector("summary");
-			if (summary) {
-				summary.dataset.part = "header";
-
-				// Check for custom indicators
-				const customIndicator = summary.querySelector('[data-slot="indicator"]') as HTMLElement;
-				const customOpenIndicator = summary.querySelector('[data-slot="indicator-open"]') as HTMLElement;
-				const customClosedIndicator = summary.querySelector('[data-slot="indicator-closed"]') as HTMLElement;
-
-				if (customOpenIndicator) customOpenIndicator.dataset.part = "indicator";
-				if (customClosedIndicator) customClosedIndicator.dataset.part = "indicator";
-				if (customIndicator) customIndicator.dataset.part = "indicator";
-			}
-
-			// Get the content (everything after summary)
-			const content = Array.from(item.children).filter((child) => child.tagName !== "SUMMARY");
+		for (const details of this.detailsList || []) {
+			if (details.__el) return;
+			details.__el = {};
+			this.events.addEventListener(details, "click", this.handleClick, { capture: true });
+			const content = Array.from(details.children).filter((child) => child.tagName !== "SUMMARY");
 			for (const el of content) {
 				(el as HTMLElement).dataset.part = "content";
 			}
@@ -88,7 +111,6 @@ export class ElAccordion extends HTMLElement {
 	}
 
 	private handleClick(event: MouseEvent) {
-		console.log("handleClick");
 		event.preventDefault();
 		if ((event.target as HTMLElement).tagName !== "SUMMARY") {
 			return;
@@ -96,8 +118,10 @@ export class ElAccordion extends HTMLElement {
 		const details = (event.target as HTMLElement).closest("details");
 		if (!details || details.getAttribute("aria-disabled") === "true") return;
 
-		if (this.controlled) {
+		if (this._controlled) {
 			this.handleControlledToggle(details, details.hasAttribute("open"));
+		} else if (this._experimental) {
+			this.handleExperimentalToggle(details, details.hasAttribute("open"));
 		} else {
 			this.handleToggle(details);
 		}
@@ -105,21 +129,32 @@ export class ElAccordion extends HTMLElement {
 
 	private handleControlledToggle(details: HTMLDetailsElement, isOpenPreviously: boolean) {
 		if (isOpenPreviously) {
-			const hideEvent = new CustomEvent("ElHide", {
-				bubbles: true,
-				cancelable: true,
-				detail: { open: false, target: details },
-			});
-			this.dispatchEvent(hideEvent);
+			this.events.dispatch("ElHide", { open: false, target: details });
 		} else {
-			const showEvent = new CustomEvent("ElShow", {
-				bubbles: true,
-				cancelable: true,
-				detail: { open: true, target: details },
-			});
-			this.dispatchEvent(showEvent);
+			this.events.dispatch("ElShow", { open: true, target: details });
 		}
-		return;
+	}
+
+	private handleExperimentalToggle(details: HTMLDetailsElement, isOpenPreviously: boolean) {
+		if (isOpenPreviously) {
+			if (this.events.dispatch("ElHide", { open: false, target: details })) {
+				details.removeAttribute("open");
+				details.addEventListener("transitionend", (e) => {
+					if (e.target === details && e.propertyName === "block-size") {
+						this.events.dispatch("ElAfterHide", { open: false, target: details });
+					}
+				});
+			}
+		} else {
+			if (this.events.dispatch("ElShow", { open: true, target: details })) {
+				details.setAttribute("open", "");
+				details.addEventListener("transitionend", (e) => {
+					if (e.target === details && e.propertyName === "block-size") {
+						this.events.dispatch("ElAfterShow", { open: true, target: details });
+					}
+				});
+			}
+		}
 	}
 
 	private async handleToggle(details: HTMLDetailsElement, effect = false) {
@@ -145,154 +180,48 @@ export class ElAccordion extends HTMLElement {
 			openPeer?.removeAttribute("name");
 		}
 
-		// await stopAnimations(content as HTMLElement);
-		// if (indicator) {
-		// 	await stopAnimations(indicator as HTMLElement);
-		// }
+		await stopAnimations(content as HTMLElement);
 		if (isOpenPreviously) {
 			// Hide
-			const hideEvent = new CustomEvent("ElHide", {
-				bubbles: true,
-				cancelable: true,
-				composed: true,
-				detail: { open: false, target: details },
-			});
-			if (self.dispatchEvent(hideEvent)) {
+			if (this.events.dispatch("ElHide", { open: false, target: details })) {
+				details.setAttribute("data-hiding", "");
 				function afterHide() {
-					self.dispatchEvent(
-						new CustomEvent("ElAfterHide", {
-							bubbles: true,
-							detail: { open: false, target: details },
-						}),
-					);
+					self.events.dispatch("ElAfterHide", { open: false, target: details });
 					details?.removeAttribute("open");
+					details?.removeAttribute("data-hiding");
 				}
 				if (effect) {
 					// returns before animation is complete
-					this.transitionHide(content).then(() => {
+					this.animateHide(content).then(() => {
 						afterHide();
 					});
 				} else {
 					// returns after animation is complete
-					await this.transitionHide(content);
+					await this.animateHide(content);
 					afterHide();
 				}
 			}
 		} else {
 			details.setAttribute("open", "");
 			// Show
-			const showEvent = new CustomEvent("ElShow", {
-				bubbles: true,
-				cancelable: true,
-				detail: { open: true, target: details },
-			});
-
-			if (self.dispatchEvent(showEvent)) {
+			if (this.events.dispatch("ElShow", { open: true, target: details })) {
 				if (openPeer) {
 					this.handleToggle(openPeer, true);
 				}
 
-				await this.transitionShow(content);
-				this.dispatchEvent(
-					new CustomEvent("ElAfterShow", {
-						bubbles: true,
-						detail: { open: true, target: details },
-					}),
-				);
+				await this.animateShow(content);
+				this.events.dispatch("ElAfterShow", { open: true, target: details });
 			}
 		}
 		if (name && openPeer) openPeer.setAttribute("name", name);
 	}
 
-	private async transitionShow(content: Element) {
-		return new Promise((resolve) => {
-			if (!content) resolve("invalidContent");
-			const contentEl = content as HTMLElement;
-			const scrollHeight = contentEl.scrollHeight;
-			contentEl.style.blockSize = "0px";
-			contentEl.style.opacity = "0";
-			contentEl.style.paddingBlockStart = "0px";
-			contentEl.style.paddingBlockEnd = "0px";
-			contentEl.setAttribute("data-animatedShow", "");
-			requestAnimationFrame(() => {
-				contentEl.style.blockSize = `${scrollHeight}px`;
-				contentEl.style.opacity = "1";
-			});
-
-			const cleanup = () => {
-				contentEl.style.blockSize = "";
-				contentEl.style.opacity = "";
-				contentEl.style.paddingBlockStart = "";
-				contentEl.style.paddingBlockEnd = "";
-				contentEl.removeAttribute("data-animatedShow");
-			};
-			contentEl.addEventListener(
-				"transitionend",
-				() => {
-					cleanup();
-					resolve("transitionend");
-				},
-				{ once: true },
-			);
-			contentEl.addEventListener(
-				"transitioncancel",
-				() => {
-					cleanup();
-					resolve("transitioncancel");
-				},
-				{ once: true },
-			);
-		});
-	}
-
-	private async transitionHide(content: Element) {
-		return new Promise((resolve) => {
-			if (!content) resolve("invalidContent");
-			const contentEl = content as HTMLElement;
-			contentEl.style.blockSize = `${contentEl.scrollHeight}px`;
-			contentEl.style.paddingBlockStart = "0px";
-			contentEl.style.paddingBlockEnd = "0px";
-			contentEl.style.opacity = "1";
-			contentEl.setAttribute("data-animatedShow", "");
-			requestAnimationFrame(() => {
-				contentEl.style.blockSize = "0px";
-				contentEl.style.opacity = "0";
-			});
-
-			const cleanup = () => {
-				contentEl.style.blockSize = "";
-				contentEl.style.paddingBlockStart = "";
-				contentEl.style.paddingBlockEnd = "";
-				contentEl.style.opacity = "";
-				contentEl.removeAttribute("data-animatedShow");
-			};
-			contentEl.addEventListener(
-				"transitionend",
-				() => {
-					cleanup();
-					resolve("transitionend");
-				},
-				{ once: true },
-			);
-			contentEl.addEventListener(
-				"transitioncancel",
-				() => {
-					cleanup();
-					resolve("transitioncancel");
-				},
-				{ once: true },
-			);
-		});
-	}
-
-	private async animateShow(content: Element | null, indicator: Element | null) {
+	private async animateShow(content: Element | null) {
 		if (!content) return;
 		const duration = getComputedDuration(this, "--el-accordion-duration", 250);
 		const easing = getComputedStyle(this).getPropertyValue("--el-accordion-easing").trim() || "ease-in-out";
 
 		const contentEl = content as HTMLElement;
-		const indicatorEl = indicator as HTMLElement;
-
 		const height = contentEl.scrollHeight;
 		const paddingBlockStart = getComputedStyle(contentEl).getPropertyValue("padding-block-start");
 		const paddingBlockEnd = getComputedStyle(contentEl).getPropertyValue("padding-block-end");
@@ -305,31 +234,21 @@ export class ElAccordion extends HTMLElement {
 				paddingBlockEnd: paddingBlockEnd,
 			},
 		];
-		if (indicatorEl) {
-			const indicatorKeyframes = [{ transform: "rotate(45deg)" }, { transform: "rotate(-135deg)" }];
-			animate(indicatorEl, indicatorKeyframes, {
-				duration,
-				easing,
-			});
-		}
 		await animate(contentEl, contentKeyframes, {
 			duration,
 			easing,
 		});
 	}
 
-	private async animateHide(details: ExtendedHTMLDetailsElement, content: Element | null, indicator: Element | null) {
+	private async animateHide(content: Element | null) {
 		if (!content) return;
 		const duration = getComputedDuration(this, "--el-accordion-duration", 250);
 		const easing = getComputedStyle(this).getPropertyValue("--el-accordion-easing").trim() || "ease-in-out";
 		const contentEl = content as HTMLElement;
-		const indicatorEl = indicator as HTMLElement;
-
 		// Start with content visible
 		const height = contentEl.scrollHeight;
 		const paddingBlockStart = getComputedStyle(contentEl).getPropertyValue("padding-block-start");
 		const paddingBlockEnd = getComputedStyle(contentEl).getPropertyValue("padding-block-end");
-
 		// Hide content with animation
 		const contentKeyframes = [
 			{
@@ -345,15 +264,6 @@ export class ElAccordion extends HTMLElement {
 				paddingBlockEnd: "0",
 			},
 		];
-
-		if (indicatorEl) {
-			const indicatorKeyframes = [{ transform: "rotate(-135deg)" }, { transform: "rotate(45deg)" }];
-			animate(indicatorEl, indicatorKeyframes, {
-				duration,
-				easing,
-			});
-		}
-
 		await animate(contentEl, contentKeyframes, {
 			duration,
 			easing,

@@ -1,4 +1,5 @@
-export function setupCounter(element: HTMLButtonElement) {
+import type { ElButton } from "@elementals/elements/button";
+export function setupCounter(element: ElButton) {
 	let counter = 0;
 	const setCounter = (count: number) => {
 		counter = count;

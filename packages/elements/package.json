@@ -5,9 +5,11 @@
 	"main": "index.js",
 	"type": "module",
 	"scripts": {
-		"dev": "pnpm tsup --watch",
-		"build": "tsup"
+		"dev": "vite build --watch",
+		"build": "vite build && tsc",
+		"build:types": "tsc"
 	},
+	"types": "./dist/index.d.ts",
 	"exports": {
 		"./button": {
 			"types": "./dist/elements/button/index.d.ts",
@@ -17,16 +19,13 @@
 			"types": "./dist/elements/accordion/index.d.ts",
 			"default": "./dist/elements/accordion/index.js"
 		},
-		"./color/primitives": {
-			"types": "./dist/tokens/primitives.d.ts",
-			"default": "./dist/tokens/primitives.js"
+		"./react": {
+			"types": "./dist/react.d.ts"
 		},
-		"./color": {
-			"types": "./dist/tokens/color.d.ts",
-			"default": "./dist/tokens/color.js"
-		},
-		"./dist/*": "./dist/*",
-		"./color.css": "./dist/color.css"
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		}
 	},
 	"files": ["dist"],
 	"keywords": [],
@@ -34,8 +33,9 @@
 	"license": "ISC",
 	"devDependencies": {
 		"@types/node": "^22.7.5",
-		"colorjs.io": "^0.5.2",
-		"tsup": "^8.3.0",
-		"typescript": "^5.6.3"
+		"glob": "^11.0.1",
+		"typescript": "^5.6.3",
+		"vite": "^6.2.0",
+		"vite-plugin-dts": "^4.5.1"
 	}
 }

@@ -9,5 +9,24 @@
   <body>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
+    <el-accordion id="accordion">
+      <details>
+        <summary>Test</summary>
+        <div>Test</div>
+      </details>
+    </el-accordion>
+    <br />
+    <el-accordion experimental>
+      <details name="experimental-accordion">
+        <summary>Experimental Accordion</summary>
+        <p>This is an experimental accordion.</p>
+      </details>
+    </el-accordion>
+    <el-accordion controlled>
+      <details name="controlled-accordion">
+        <summary>Controlled Accordion</summary>
+        <p>This is a controlled accordion.</p>
+      </details>
+    </el-accordion>
   </body>
 </html>

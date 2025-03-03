@@ -1,5 +1,5 @@
 @import "tailwindcss";
-
+@import "@elementals/tokens/color/css";
 @theme {
 	--color-accent-500: #6366f1;
 	--color-base-100: #f3f4f6;
