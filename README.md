@@ -21,3 +21,6 @@ Types:
 - revert: Reverts a previous commit
 - style: Changes that do not affect the meaning of the code (formatting, etc)
 - test: Adding missing tests or correcting existing tests
+
+## Resources
+- Frameworks usage stats: https://gist.github.com/tkrotoff/b1caa4c3a185629299ec234d2314e190 [React: ~40%, Vue: ~30%, Angular: ~20%]

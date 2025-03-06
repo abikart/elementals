@@ -1,22 +1,40 @@
 import { animate, getComputedDuration, stopAnimations } from "../../utilities/animation";
 import { createEventController } from "../../utilities/events";
+import "./types.react";
 
 interface ExtendedHTMLDetailsElement extends HTMLDetailsElement {
 	__el?: unknown;
 }
 
-// Define event types
-interface AccordionEventMap {
-	ElShow: CustomEvent<{ open: boolean; target: HTMLDetailsElement }>;
-	ElHide: CustomEvent<{ open: boolean; target: HTMLDetailsElement }>;
-	ElAfterShow: CustomEvent<{ open: boolean; target: HTMLDetailsElement }>;
-	ElAfterHide: CustomEvent<{ open: boolean; target: HTMLDetailsElement }>;
+/**
+ * Accordion component that provides collapsible sections
+ *
+ * @Prop controlled - Whether the accordion's state is controlled from outside
+ * @Prop experimental - Whether to use experimental features
+ * @fires ElShow - Fired when the accordion is about to show
+ * @fires ElHide - Fired when the accordion is about to hide
+ * @fires ElAfterShow - Fired after the accordion has shown
+ * @fires ElAfterHide - Fired after the accordion has hidden
+ */
+
+/** EventMap for the accordion element, events bubble so events can be listened to on the parent element */
+declare global {
+	interface ElAccordionEventMap {
+		ElShow: CustomEvent<{ open: boolean; target: HTMLDetailsElement }>;
+		ElHide: CustomEvent<{ open: boolean; target: HTMLDetailsElement }>;
+		ElAfterShow: CustomEvent<{ open: boolean; target: HTMLDetailsElement }>;
+		ElAfterHide: CustomEvent<{ open: boolean; target: HTMLDetailsElement }>;
+	}
+
+	interface HTMLElementEventMap extends ElAccordionEventMap {}
 }
 
 export class ElAccordion extends HTMLElement {
 	private detailsList: HTMLCollectionOf<ExtendedHTMLDetailsElement> | null = null;
 	private observer: MutationObserver | null = null;
 	private events = createEventController(this);
+	private _controlled = false;
+	private _experimental = false;
 
 	constructor() {
 		super();
@@ -28,15 +46,15 @@ export class ElAccordion extends HTMLElement {
 	}
 
 	/**
-	 * @property {boolean} controlled - Whether the accordion's state is controlled from outside
-	 * @default false
-	 * @details
+	 * Whether the accordion's state is controlled from outside
+	 *
+	 * @defaultValue false
+	 * @remarks
 	 * If true, the accordion's state will not be managed internally
 	 * and only the ElShow and ElHide events will be dispatched.
 	 * The ElAfterShow and ElAfterHide events will not be dispatched.
 	 * The user manages the open/close state of the accordion in response to the ElShow and ElHide events.
 	 */
-	private _controlled = false;
 	get controlled() {
 		return this._controlled;
 	}
@@ -50,12 +68,12 @@ export class ElAccordion extends HTMLElement {
 	}
 
 	/**
-	 * @property {boolean} experimental - Enable experimental features.
-	 * @default false
-	 * @details
+	 * Enable experimental features.
+	 *
+	 * @defaultValue false
+	 * @remarks
 	 * Uses modern CSS transition features like calc-size(), transition-behavior: allow-discrete, auto block-size etc. instead of Web Animations API.
 	 */
-	private _experimental = false;
 	get experimental() {
 		return this._experimental;
 	}
@@ -269,9 +287,4 @@ export class ElAccordion extends HTMLElement {
 			easing,
 		});
 	}
-}
-
-// Register the custom element
-if (!customElements.get("el-accordion")) {
-	customElements.define("el-accordion", ElAccordion);
 }

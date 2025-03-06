@@ -7,8 +7,11 @@ import type { ElAccordion } from "@elementals/elements/accordion";
 
 const root = document.querySelector<HTMLDivElement>("#app");
 const button = document.querySelector<ElButton>("#counter");
-// const accordion = document.querySelector<ElAccordion>("#accordion");
-// if (accordion) accordion.experimental = true;
+const accordion = document.querySelector<ElAccordion>("#accordion");
+if (accordion) accordion.experimental = true;
+accordion?.addEventListener("ElShow", (e) => {
+	console.log(e);
+});
 
 if (!root) {
 	throw new Error("No root element found");
@@ -19,6 +22,12 @@ root.innerHTML = `
       <button id="counter" type="button">Test</button>
     </el-button>
     <br />
+    <el-accordion experimental>
+      <details name="accordion">
+        <summary>Accordion</summary>
+        <p>This is an accordion.</p>
+      </details>
+    </el-accordion>
   </div>
 `;
 

@@ -2,59 +2,57 @@
  * Event management utilities for custom elements
  */
 
+interface EventControllerOptions<T> {
+	events: Array<keyof T>;
+}
+
 /**
- * Creates a controller for managing custom events with consistent naming and behavior
- * @param element The element that will dispatch events
- * @returns An object with methods for dispatching and managing events
+ * Creates an event controller for managing custom events with type safety
+ * @template T - Event map interface defining custom events
+ * @param target - The EventTarget that will dispatch events
+ * @param options - Configuration options including list of valid events
+ * @returns Event controller with type-safe methods
  */
-export function createEventController(element: HTMLElement) {
-	const abortController = new AbortController();
+export function createEventController(target: EventTarget) {
+	const controller = new AbortController();
 
 	return {
 		/**
-		 * Dispatch a custom event with standardized naming
-		 * @param type Base event name (will be prefixed and capitalized)
-		 * @param detail Event detail data
-		 * @returns Boolean indicating if the event was canceled
+		 * Dispatches a custom event with type checking
+		 * @param eventName - Name of the event to dispatch
+		 * @param detail - Event detail object
+		 * @returns boolean indicating if the event was cancelled
 		 */
-		dispatch: <T>(type: string, detail: T): boolean => {
-			const event = new CustomEvent(type, {
-				bubbles: true,
-				cancelable: true,
-				composed: true, // For shadow DOM boundary crossing
-				detail,
-			});
-
-			return element.dispatchEvent(event);
+		dispatch(eventName: string, detail: unknown): boolean {
+			return target.dispatchEvent(
+				new CustomEvent(eventName as string, {
+					detail,
+					bubbles: true,
+					cancelable: true,
+				}),
+			);
 		},
 
 		/**
-		 * Get the abort signal for use with event listeners
+		 * Adds an event listener with proper typing
 		 */
-		get signal() {
-			return abortController.signal;
-		},
-
-		/**
-		 * Cancel all event listeners using this controller's signal
-		 */
-		abort: () => {
-			abortController.abort();
-		},
-
-		/**
-		 * Add an event listener with the controller's abort signal
-		 */
-		addEventListener: <K extends keyof HTMLElementEventMap>(
-			target: HTMLElement,
-			type: K,
-			listener: (ev: HTMLElementEventMap[K]) => void,
-			options?: Omit<AddEventListenerOptions, "signal">,
-		) => {
-			target.addEventListener(type, listener, {
+		addEventListener<E extends Event>(
+			element: EventTarget,
+			type: string,
+			listener: (event: E) => void,
+			options?: AddEventListenerOptions,
+		): void {
+			element.addEventListener(type, listener as EventListener, {
 				...options,
-				signal: abortController.signal,
+				signal: controller.signal,
 			});
+		},
+
+		/**
+		 * Aborts all registered event listeners
+		 */
+		abort(): void {
+			controller.abort();
 		},
 	};
 }

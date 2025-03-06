@@ -13,7 +13,9 @@
 			"**/.changeset/*",
 			"**/dist/*",
 			"**/build/*",
-			"**/node_modules/*"
+			"**/node_modules/*",
+			"**/.angular/*",
+			"**/.vscode/*"
 		]
 	},
 	"formatter": {

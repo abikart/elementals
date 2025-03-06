@@ -182,7 +182,7 @@ export default function Accordion() {
 
 			<br />
 			<h2>Experimental Accordion</h2>
-			<el-accordion experimental>
+			<el-accordion onElShow={() => {}} experimental>
 				<details name="experimental-accordion">
 					<summary>Experimental Accordion</summary>
 					<p>This is an experimental accordion.</p>
